@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-public class TrainerController implements ActionListener, WindowListener {
+public class TrainerController implements ActionListener {
     private MenüPanel mp = new MenüPanel(this);
     private MenüFrame mf = new MenüFrame(mp);
     private FragenpoolPanel fragenPanel = new FragenpoolPanel(this);

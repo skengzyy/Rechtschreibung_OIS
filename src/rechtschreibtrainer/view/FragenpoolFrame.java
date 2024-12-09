@@ -20,7 +20,7 @@ public class FragenpoolFrame extends JFrame implements WindowListener {
 
     @Override
     public void windowClosing(WindowEvent e) {
-        frame
+
     }
 
     @Override
