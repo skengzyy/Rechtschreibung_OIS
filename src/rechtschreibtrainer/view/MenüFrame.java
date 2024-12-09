@@ -3,8 +3,9 @@ package rechtschreibtrainer.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowListener;
 
-public class MenüFrame extends JFrame {
+public class MenüFrame extends JFrame  {
     public MenüFrame(JPanel panel) {
         super("SpellWeaver");
         this.add(panel);
