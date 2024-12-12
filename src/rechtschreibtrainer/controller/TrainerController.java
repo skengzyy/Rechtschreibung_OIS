@@ -2,6 +2,7 @@ package rechtschreibtrainer.controller;
 
 import rechtschreibtrainer.view.*;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -18,6 +19,62 @@ public class TrainerController implements ActionListener {
         new TrainerController();
     }
 
+    public TrainerController() {
+        fragenFrame.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {}
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                fragenFrame.setVisible(false);
+                mf.setVisible(true);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {}
+
+            @Override
+            public void windowIconified(WindowEvent e) {}
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {}
+
+            @Override
+            public void windowActivated(WindowEvent e) {}
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {}
+        });
+
+        // WindowListener für QuizFrame hinzufügen
+        quizFrame.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {}
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // MenüFrame wieder sichtbar machen
+                quizFrame.setVisible(false);
+                mf.setVisible(true);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {}
+
+            @Override
+            public void windowIconified(WindowEvent e) {}
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {}
+
+            @Override
+            public void windowActivated(WindowEvent e) {}
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {}
+        });
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String ac = e.getActionCommand();
@@ -29,11 +86,13 @@ public class TrainerController implements ActionListener {
             quizFrame.setVisible(true);
 
         } else if(ac.equals("spielmode")) {
+            mf.setVisible(false);
+            quizFrame.setVisible(true);
 
         } else if(ac.equals("hilfe")) {
 
         } else if(ac.equals("exit")) {
-
+            mf.dispose();
         }
     }
 

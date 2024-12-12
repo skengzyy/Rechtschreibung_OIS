@@ -13,7 +13,7 @@ public class MenüPanel extends JPanel  {
         this.tc = tc;
         GridLayout gl = new GridLayout(5,1,3,3);
         this.setLayout(gl);
-        this.setBackground(Color.ORANGE);
+        this.setBackground(Color.LIGHT_GRAY);
 
         JPanel bottomArea = new JPanel();
         bottomArea.setLayout(new GridLayout(0,2));
@@ -21,6 +21,7 @@ public class MenüPanel extends JPanel  {
 
         Font f = new Font("Arial", Font.BOLD, 28);
         Font f2 = new Font("Arial", Font.PLAIN,18);
+
         titel = new JLabel("SpellWeaver - Rechtschreibtrainer", JLabel.CENTER);
         titel.setFont(f);
 
