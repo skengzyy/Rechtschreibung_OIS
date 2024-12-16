@@ -14,10 +14,5 @@ public class MenüFrame extends JFrame  {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
-    public void showFrame() {
-        this.setVisible(true);
-    }
-    public void hideFrame() {
-        this.setVisible(true);
-    }
+
 }

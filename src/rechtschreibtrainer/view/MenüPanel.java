@@ -11,6 +11,7 @@ public class MenüPanel extends JPanel  {
     private JLabel titel;
     public MenüPanel(TrainerController tc) {
         this.tc = tc;
+
         GridLayout gl = new GridLayout(5,1,3,3);
         this.setLayout(gl);
         this.setBackground(Color.LIGHT_GRAY);
@@ -43,12 +44,16 @@ public class MenüPanel extends JPanel  {
         spielmode.setActionCommand("spielmode");
 
         hilfe = new JButton("Hilfe");
-        hilfe.setForeground(Color.LIGHT_GRAY);
+        hilfe.setBackground(Color.GRAY);
+        hilfe.setOpaque(true);
+        hilfe.setBorderPainted(false);
         hilfe.addActionListener(this.tc);
         hilfe.setActionCommand("hilfe");
 
         exit = new JButton("Exit");
-        exit.setForeground(Color.RED);
+        exit.setBackground(Color.RED);
+        exit.setOpaque(true);
+        exit.setBorderPainted(false);
         exit.addActionListener(this.tc);
         exit.setActionCommand("exit");
 
