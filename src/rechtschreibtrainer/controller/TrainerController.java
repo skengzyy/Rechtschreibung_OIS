@@ -15,6 +15,10 @@ public class TrainerController implements ActionListener {
     private  FragenpoolFrame fragenFrame = new FragenpoolFrame(fragenPanel);
     private QuizPanel  quizPanel = new QuizPanel(this);
     private QuizFrame quizFrame = new QuizFrame(quizPanel);
+    private SpielPanel spielPanel = new SpielPanel(this);
+    private SpielFrame spielFrame = new SpielFrame(spielPanel);
+    private HilfePanel hilfePanel = new HilfePanel(this);
+    private HilfeFrame hilfeFrame = new HilfeFrame(hilfePanel);
     public static void main(String[] args) {
         new TrainerController();
     }
@@ -78,22 +82,23 @@ public class TrainerController implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String ac = e.getActionCommand();
+
+        fragenFrame.setVisible(false);
+        quizFrame.setVisible(false);
+        //spielFrame.setVisible(false);
+
         if(ac.equals("verwalten")) {
             mf.setVisible(false);
             fragenFrame.setVisible(true);
         } else if(ac.equals("quizmode")) {
             mf.setVisible(false);
             quizFrame.setVisible(true);
-
         } else if(ac.equals("spielmode")) {
             mf.setVisible(false);
             quizFrame.setVisible(true);
-
         } else if(ac.equals("hilfe")) {
-
-        } else if(ac.equals("exit")) {
-            mf.dispose();
-        }
+            hilfeFrame.setVisible(true);
+        } else if(ac.equals("exit")) System.exit(0);
     }
 
 
