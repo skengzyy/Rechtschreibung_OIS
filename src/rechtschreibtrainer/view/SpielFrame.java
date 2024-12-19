@@ -5,10 +5,11 @@ import java.awt.*;
 
 public class SpielFrame extends JFrame {
     public SpielFrame(JPanel panel) {
+        super("Spielmodus");
         this.add(panel);
-        this.setDefaultCloseOperation(3);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(400, 250);
-        this.setLocationRelativeTo((Component)null);
-        this.setVisible(true);
+        this.setLocationRelativeTo(null);
+        this.setVisible(false);
     }
 }

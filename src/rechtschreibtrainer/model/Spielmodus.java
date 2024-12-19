@@ -1,4 +1,4 @@
 package rechtschreibtrainer.model;
 
-public class StatistikModel {
+public class Spielmodus {
 }
