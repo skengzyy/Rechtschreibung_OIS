@@ -1,4 +1,4 @@
 package rechtschreibtrainer.model;
 
-public interface Frageinterface {
+public class BooleanFrage {
 }

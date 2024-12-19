@@ -7,7 +7,7 @@ public class QuizFrame extends JFrame {
     public QuizFrame(JPanel panel) {
         this.add(panel);
         this.setDefaultCloseOperation(HIDE_ON_CLOSE);
-        this.setSize(800, 400);
+        this.setSize(800, 500);
         this.setLocationRelativeTo((Component)null);
         this.setVisible(false);
     }

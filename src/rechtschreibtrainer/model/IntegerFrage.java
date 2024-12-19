@@ -1,4 +1,4 @@
 package rechtschreibtrainer.model;
 
-public class QuizModel {
+public class IntegerFrage {
 }
