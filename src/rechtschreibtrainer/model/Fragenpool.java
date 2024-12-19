@@ -59,5 +59,5 @@ public abstract class Fragenpool {
         return this.fragenpool.length;
     }
 
-    public abstract boolean check();
+
 }

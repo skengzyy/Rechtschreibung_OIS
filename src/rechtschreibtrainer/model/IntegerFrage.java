@@ -16,8 +16,13 @@ public class IntegerFrage extends Frage{
         if (loesung >= 0) this.loesung = loesung;
     }
 
-    @Override
-    public boolean check(int antwort){
 
+    public boolean check(int antwort) {
+        return antwort == loesung;
+    }
+
+    @Override
+    public String toString() {
+        return super.getFrageText().concat(";").concat("Integer").concat(";").concat(Integer.toString(getLoesung()));
     }
 }
