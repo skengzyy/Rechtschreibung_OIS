@@ -92,7 +92,7 @@ public class TrainerController implements ActionListener {
         } else if(ac.equals("hilfe")) {
 
         } else if(ac.equals("exit")) {
-            mf.dispose();
+            System.exit(0);
         }
     }
 

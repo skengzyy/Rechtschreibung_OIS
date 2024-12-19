@@ -27,7 +27,7 @@ public class QuizPanel extends JPanel {
         label.setFont(new Font("Arial", Font.BOLD, 28));
         label.setHorizontalAlignment(JLabel.CENTER);
 
-        query = new JLabel("");
+        query = new JLabel("Lorem ipsum lorem ipsum lorem ipsum lorem ipsum");
         query.setFont(new Font("Arial", Font.PLAIN, 18));
         query.setHorizontalAlignment(JLabel.CENTER);
 
