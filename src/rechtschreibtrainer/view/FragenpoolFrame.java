@@ -6,6 +6,7 @@ import java.awt.event.WindowListener;
 
 public class FragenpoolFrame extends JFrame {
     public FragenpoolFrame(JPanel panel) {
+        super("Fragenpool verwalten");
         this.add(panel);
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         this.setSize(800, 500);

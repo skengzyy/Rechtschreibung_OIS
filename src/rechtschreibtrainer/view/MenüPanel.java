@@ -27,11 +27,15 @@ public class MenüPanel extends JPanel  {
         titel.setFont(f);
 
         verwalten = new JButton("Fragenpool verwalten");
+        verwalten.setBackground(Color.WHITE);
+        verwalten.setOpaque(true);
         verwalten.setFont(f2);
         verwalten.addActionListener(this.tc);
         verwalten.setActionCommand("verwalten");
 
         quizmode = new JButton("Quizmodus starten");
+        quizmode.setBackground(Color.WHITE);
+        quizmode.setOpaque(true);
         quizmode.setFont(f2);
         quizmode.addActionListener(this.tc);
         quizmode.setActionCommand("quizmode");
@@ -39,6 +43,8 @@ public class MenüPanel extends JPanel  {
 
 
         spielmode = new JButton("Spielmodus starten");
+        spielmode.setBackground(Color.WHITE);
+        spielmode.setOpaque(true);
         spielmode.setFont(f2);
         spielmode.addActionListener(this.tc);
         spielmode.setActionCommand("spielmode");
@@ -49,6 +55,7 @@ public class MenüPanel extends JPanel  {
         hilfe.setBorderPainted(false);
         hilfe.addActionListener(this.tc);
         hilfe.setActionCommand("hilfe");
+        hilfe.addActionListener( e -> showHelp());
 
         exit = new JButton("Exit");
         exit.setBackground(Color.RED);
@@ -68,4 +75,11 @@ public class MenüPanel extends JPanel  {
         this.add(bottomArea);
 
     }
+    public void showHelp() {
+        JOptionPane.showMessageDialog(this,
+                "1.Fragenpool verwaltung: \n" + "\n" + "- Frage bearbeiten" + "\n" + "- Frage hinzufügen" + "\n" + "- Frage löschen" +  "\n" + "- Fragen laden" + "\n\n2.Quizmodus starten:\n " + "\nQuizmodus in dem Fragen in Form von Text \n(Text, Integer oder Boolean Eingaben) \n und Bild gestellt." + "\n\n3.Spielmodus:\n\n Fragen werden in Form eines Spiels gestellt. \n Es wird ein Wort gemischt und es muss aus \nden Buchstaben das richtige Wort gewählt werden." ,
+                "Info",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
 }
