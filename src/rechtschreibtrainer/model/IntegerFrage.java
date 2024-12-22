@@ -25,4 +25,6 @@ public class IntegerFrage extends Frage{
     public String toString() {
         return super.getFrageText().concat(";").concat("Integer").concat(";").concat(Integer.toString(getLoesung()));
     }
+
+
 }

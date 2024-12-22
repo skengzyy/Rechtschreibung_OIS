@@ -14,15 +14,16 @@ public class Frage {
     }
 
     public String getFrageText() {
-        return text;
+        return this.text;
     }
+
 
     public void setFrageText(String text) {
         if (text != null && !text.isEmpty()) this.text = text;
     }
 
     public String getAntwort() {
-        return antwort;
+        return this.antwort;
     }
 
     public void setAntwort(String antwort) {
