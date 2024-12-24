@@ -74,8 +74,12 @@ public class QuizPanel extends JPanel {
         exitButton.setForeground(Color.WHITE);
         exitButton.setFocusPainted(false);
         exitButton.setBorder(BorderFactory.createLineBorder(new Color(178, 34, 34), 2)); // Fire Brick border
-        exitButton.setActionCommand("exit");
+        exitButton.setActionCommand("exitQuizPage");
         exitButton.addActionListener(listener);
+        exitButton.addActionListener(e -> {
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(exitButton);
+            topFrame.setVisible(false);
+        });
         buttonGbc.gridx = 1;
         buttonGbc.weightx = 0.5;
         buttonGbc.insets = new Insets(0, 15, 0, 0);  // Space between buttons

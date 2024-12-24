@@ -94,8 +94,13 @@ public class TrainerController implements ActionListener {
 
         } else if(ac.equals("hilfe")) {
 
+
         } else if(ac.equals("exit")) {
             System.exit(0);
+        }
+        else if(ac.equals("exitQuizPage")){
+            quizFrame.setVisible(false);
+            mf.setVisible(true);
         }
     }
 
