@@ -18,7 +18,7 @@ public class MyFragenpool extends Fragenpool implements Speicherbar{
     }
 
     public Fragenpool laden(String pfad){
-
+        return null;
     }
 
     public void speichern(){
@@ -27,9 +27,10 @@ public class MyFragenpool extends Fragenpool implements Speicherbar{
 
     public Fragenpool laden(){
 
+        return null;
     }
 
     public boolean check(){
-
+        return false;
     }
 }
