@@ -32,7 +32,7 @@ public class TrainerController implements ActionListener {
         quizPanel = new QuizPanel(this);
         quizFrame = new QuizFrame(quizPanel);
         char[] bs = {'A', 'N', 'D','L','I','E'};
-        spielPanel = new SpielPanel(this, bs, this);
+        spielPanel = new SpielPanel(this, bs);
         spielFrame = new SpielFrame(spielPanel);
 
         // Fenster-Events hinzufügen
@@ -84,8 +84,8 @@ public class TrainerController implements ActionListener {
             quizFrame.setVisible(false);
             mf.setVisible(true);
         }
+        /*
         else if (ac.startsWith("buchstabe_")) {
-
             char ausgewählterBuchstabe = ac.charAt(ac.length() - 1);
             spielPanel.addBuchstabeToAntwort(ausgewählterBuchstabe);
 
@@ -106,9 +106,9 @@ public class TrainerController implements ActionListener {
                 spielPanel.highlightButton((JButton) e.getSource(), false);
                 spielPanel.updateStatus(false, aktuelleEingabe);
             }
-        }else if (ac.equals("rightOrWrong")){
-
         }
+
+         */
 
     }
 }

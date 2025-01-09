@@ -24,8 +24,7 @@ public class SpielPanel extends JPanel {
     private final char[] alphabet = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
         'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
-    public SpielPanel(ActionListener listener, char[] frage, TrainerController tc) throws IOException {
-        this.tc = tc;
+    public SpielPanel(ActionListener listener, char[] frage) throws IOException {
         char[] new_frage = new char[(frage.length * 2) - 1];
 
         System.arraycopy(frage, 0, new_frage, 0, frage.length);
