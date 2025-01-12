@@ -64,6 +64,51 @@ public class SpielPanel extends JPanel {
             JButton button = createBuchstabenButton(buchstabe, controller);
             buchstabenPanel.add(button);
         }
+        JPanel bottomPanel = new JPanel(new GridLayout(1, 4));
+        bottomPanel.setBackground(new Color(40, 44, 52));
+
+        statusLabel = new JLabel("", JLabel.CENTER);
+        statusLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        statusLabel.setForeground(Color.WHITE);
+        bottomPanel.add(statusLabel);
+
+        abbrechenButton = new JButton("Abbrechen");
+        abbrechenButton.setFont(new Font("Arial", Font.BOLD, 16));
+        abbrechenButton.setBackground(Color.RED);
+        abbrechenButton.setForeground(Color.WHITE);
+        abbrechenButton.setOpaque(true);
+        abbrechenButton.setBorderPainted(false);
+        abbrechenButton.setFocusPainted(false);
+        abbrechenButton.setActionCommand("spiel_abbrechen");
+        abbrechenButton.addActionListener(controller);
+        bottomPanel.add(abbrechenButton);
+
+        resetButton = new JButton("Reset");
+        resetButton.setFont(new Font("Arial", Font.BOLD, 16));
+        resetButton.setBackground(Color.GRAY);
+        resetButton.setForeground(Color.WHITE);
+        resetButton.setOpaque(true);
+        resetButton.setBorderPainted(false);
+        resetButton.setFocusPainted(false);
+        resetButton.setActionCommand("resetSpielPanel");
+        resetButton.addActionListener(controller);
+        bottomPanel.add(resetButton);
+
+        nextButton = new JButton("Next");
+        nextButton.setFont(new Font("Arial", Font.BOLD, 16));
+        nextButton.setBackground(new Color(40, 44, 52));
+        nextButton.setOpaque(true);
+        nextButton.setForeground(Color.WHITE);
+        nextButton.setBorderPainted(false);
+        nextButton.setFocusPainted(false);
+        nextButton.setActionCommand("spiel_next");
+        nextButton.addActionListener(controller);
+        bottomPanel.add(nextButton);
+
+        gbc.gridy = 2;
+        gbc.weighty = 0.2;
+        add(bottomPanel, gbc);
+    }
 
 
 
