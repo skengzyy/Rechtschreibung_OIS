@@ -1,21 +1,21 @@
 package rechtschreibtrainer.model;
 
 public class Rechtschreibtrainer {
-    private MyFragenpool[] fragenpool;
+    private Frage[] fragenpool;
     private int countAbgefragt;
-    private int countRichtige;
-    private int countFalsche;
+    private int countRichtige, countFalsche, anzahlVersuche;
     private Spielmodus spielmodus;
 
-    public Rechtschreibtrainer(MyFragenpool[] fragenpool) {
+    public Rechtschreibtrainer(Frage[] fragenpool, int anzahlVersuche) {
         setFragenpool(fragenpool);
+        setAnzahlVersuche(anzahlVersuche);
     }
 
-    public MyFragenpool[] getFragenpool() {
+    public Frage[] getFragenpool() {
         return fragenpool;
     }
 
-    public void setFragenpool(MyFragenpool[] fragenpool) {
+    public void setFragenpool(Frage[] fragenpool) {
         if(fragenpool != null) {
             this.fragenpool = fragenpool;
         }
@@ -50,6 +50,15 @@ public class Rechtschreibtrainer {
             this.spielmodus = spielmodus;
         }
     }
+
+    public int getAnzahlVersuche() {
+        return anzahlVersuche;
+    }
+
+    public void setAnzahlVersuche(int anzahlVersuche) {
+        this.anzahlVersuche = anzahlVersuche;
+    }
+
     public int getCountFalsche() {
         return getCountAbgefragt() - getCountRichtige();
     }

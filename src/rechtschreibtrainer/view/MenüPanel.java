@@ -53,6 +53,7 @@ public class MenüPanel extends JPanel {
         JButton button = new JButton(text);
         button.setFont(font);
         button.setBackground(bgColor);
+        button.setOpaque(true);
         button.setForeground(fgColor);
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(bgColor.darker(), 2));

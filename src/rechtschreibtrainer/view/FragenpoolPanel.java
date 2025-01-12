@@ -8,9 +8,24 @@ import java.awt.*;
 import java.io.File;
 
 public class FragenpoolPanel extends JPanel {
+
+
+
     private TrainerController tc;
     private JTextArea questionDisplay;
     private JFileChooser fileChooser;
+    private JDialog dialogAddQuestion, dialogEditQuestion, dialogDeleteQuestion;
+    //addQuestion attribute
+
+    private JLabel frageLabelA,typLabelA,antwortLabelA;
+    private JTextField indexField_Edit, frageField_Edit, typField_Edit, antwortField_Edit;
+    private JTextField indexField_Delete;
+    private JTextField frageFieldA,antwortFieldA;
+    private final  String[] typenAdd = {"String", "Bild", "Integer", "Boolean"};
+    private final JComboBox typBoxA = new JComboBox(typenAdd);
+
+    //editQuestion attribute
+
 
     private Frage[] fragenpool;
 
@@ -129,7 +144,8 @@ public class FragenpoolPanel extends JPanel {
         int returnValue = fileChooser.showSaveDialog(this);
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
+
+            File file = fileChooser.getSelectedFile() ;
             System.out.println("Datei gespeichert unter: " + file.getAbsolutePath());
         }
     }
@@ -138,16 +154,30 @@ public class FragenpoolPanel extends JPanel {
     private void loadQuestions() {
         if (fileChooser == null) {
             fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+                @Override
+                public boolean accept(File file) {
+                    return file.isDirectory() || file.getName().toLowerCase().endsWith(".txt");
+                }
+                @Override
+                public String getDescription() {
+                    return "Textdateien (*.txt)";
+                }
+            });
         }
 
         int returnValue = fileChooser.showOpenDialog(this);
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            System.out.println("Datei ausgewählt: " + file.getAbsolutePath());
+            if (!file.getName().toLowerCase().endsWith(".txt")) {
+                JOptionPane.showMessageDialog(this, "Bitte wählen Sie eine gültige .txt-Datei aus.", "Ungültige Datei", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            JOptionPane.showMessageDialog(this, "Datei erfolgreich ausgewählt: " + file.getAbsolutePath(), "Erfolg", JOptionPane.INFORMATION_MESSAGE);
+            System.out.println("Ausgewählte Datei: " + file.getAbsolutePath());
         }
     }
-
 
     private void showInfoDialog() {
         JOptionPane.showMessageDialog(this,
@@ -156,114 +186,218 @@ public class FragenpoolPanel extends JPanel {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void loadQuestion() {
 
-    }
     private void addQuestion() {
         JDialog dialog = new JDialog((Frame) null, "Frage Hinzufügen", true);
         dialog.setLayout(new GridLayout(4, 2, 10, 10));
 
-        JLabel frageLabel = new JLabel("Frage:");
-        JTextField frageField = new JTextField();
+        frageLabelA = new JLabel("Frage:");
+        frageFieldA = new JTextField();
+        typLabelA = new JLabel("Typ:");
+        antwortLabelA = new JLabel("Antwort:");
+        antwortFieldA = new JTextField();
+        typBoxA.setActionCommand("addFrageTyp");
+        JButton okButtonA = new JButton("OK");
+        okButtonA.setActionCommand("add_Frage_Ok");
+        okButtonA.addActionListener(tc);
 
-        JLabel typLabel = new JLabel("Typ:");
-        JComboBox<String> typBox = new JComboBox<>(new String[]{"String", "Bild", "Integer", "Boolean"});
 
-        JLabel antwortLabel = new JLabel("Antwort:");
-        JTextField antwortField = new JTextField();
 
-        JButton okButton = new JButton("OK");
-        okButton.addActionListener(e -> {
-            String frage = frageField.getText();
-            String typ = (String) typBox.getSelectedItem();
-            String antwort = antwortField.getText();
-            // Logik zum Hinzufügen der Frage
-            questionDisplay.append("Frage hinzugefügt: " + frage + " (" + typ + ") -> " + antwort + "\n");
-            dialog.dispose();
-        });
-
-        dialog.add(frageLabel);
-        dialog.add(frageField);
-        dialog.add(typLabel);
-        dialog.add(typBox);
-        dialog.add(antwortLabel);
-        dialog.add(antwortField);
+        dialog.add(frageLabelA);
+        dialog.add(frageFieldA);
+        dialog.add(typLabelA);
+        dialog.add(typBoxA);
+        dialog.add(antwortLabelA);
+        dialog.add(antwortFieldA);
         dialog.add(new JLabel());
-        dialog.add(okButton);
+        dialog.add(okButtonA);
 
         dialog.setSize(400, 200);
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
     }
     private void editQuestion() {
-        JDialog dialog = new JDialog((Frame) null, "Frage Ändern", true);
-        dialog.setLayout(new GridLayout(5, 2, 10, 10));
+        dialogEditQuestion = new JDialog((Frame) null, "Frage Ändern", true);
+        dialogEditQuestion.setLayout(new GridLayout(5, 2, 10, 10));
 
-        JLabel indexLabel = new JLabel("Index:");
-        JTextField indexField = new JTextField();
+        JLabel indexLabel_Edit = new JLabel("Index:");
+        indexField_Edit = new JTextField();
 
-        JLabel frageLabel = new JLabel("Neue Frage:");
-        JTextField frageField = new JTextField();
+        JLabel frageLabel_Edit = new JLabel("Neue Frage:");
+        frageField_Edit = new JTextField();
 
-        JLabel typLabel = new JLabel("Neuer Typ:");
-        JComboBox<String> typBox = new JComboBox<>(new String[]{"String", "Bild", "Integer", "Boolean"});
+        JLabel typLabel_Edit = new JLabel("Neuer Typ:");
+        typField_Edit = new JTextField();
 
-        JLabel antwortLabel = new JLabel("Neue Antwort:");
-        JTextField antwortField = new JTextField();
+        JLabel antwortLabel_Edit = new JLabel("Neue Antwort:");
+        antwortField_Edit = new JTextField();
 
-        JButton okButton = new JButton("OK");
-        okButton.addActionListener(e -> {
-            int index = Integer.parseInt(indexField.getText());
-            String frage = frageField.getText();
-            String typ = (String) typBox.getSelectedItem();
-            String antwort = antwortField.getText();
-            // Logik zum Bearbeiten der Frage
-            questionDisplay.append("Frage geändert (Index " + index + "): " + frage + " (" + typ + ") -> " + antwort + "\n");
-            dialog.dispose();
-        });
+        JButton okButton_Edit = new JButton("OK");
+        okButton_Edit.setActionCommand("edit_Frage_Ok");
+        okButton_Edit.addActionListener(tc);
 
-        dialog.add(indexLabel);
-        dialog.add(indexField);
-        dialog.add(frageLabel);
-        dialog.add(frageField);
-        dialog.add(typLabel);
-        dialog.add(typBox);
-        dialog.add(antwortLabel);
-        dialog.add(antwortField);
-        dialog.add(new JLabel());
-        dialog.add(okButton);
+        dialogEditQuestion.add(indexLabel_Edit);
+        dialogEditQuestion.add(indexField_Edit);
+        dialogEditQuestion.add(frageLabel_Edit);
+        dialogEditQuestion.add(frageField_Edit);
+        dialogEditQuestion.add(typLabel_Edit);
+        dialogEditQuestion.add(typField_Edit);
+        dialogEditQuestion.add(antwortLabel_Edit);
+        dialogEditQuestion.add(antwortField_Edit);
+        dialogEditQuestion.add(new JLabel());
+        dialogEditQuestion.add(okButton_Edit);
 
-        dialog.setSize(400, 250);
-        dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true);
+        dialogEditQuestion.setSize(400, 250);
+        dialogEditQuestion.setLocationRelativeTo(this);
+        dialogEditQuestion.setVisible(true);
     }
     public void deleteQuestion() {
-        JDialog dialog = new JDialog((Frame) null, "Frage Löschen", true);
-        dialog.setLayout(new GridLayout(2, 1, 10, 10));
+        dialogDeleteQuestion = new JDialog((Frame) null, "Frage Löschen", true);
+        dialogDeleteQuestion.setLayout(new GridLayout(2, 1, 10, 10));
 
         JPanel inputPanel = new JPanel(new BorderLayout());
         JLabel indexLabel = new JLabel("Index der zu löschenden Frage:");
-        JTextField indexField = new JTextField();
+        indexField_Delete = new JTextField();
         inputPanel.add(indexLabel, BorderLayout.NORTH);
-        inputPanel.add(indexField, BorderLayout.CENTER);
+        inputPanel.add(indexField_Delete, BorderLayout.CENTER);
 
         JButton okButton = new JButton("Löschen");
-        okButton.addActionListener(e -> {
-            int index = Integer.parseInt(indexField.getText());
-            int confirmation = JOptionPane.showConfirmDialog(dialog, "Sind Sie sicher, dass Sie die Frage löschen möchten?", "Bestätigung", JOptionPane.YES_NO_OPTION);
-            if (confirmation == JOptionPane.YES_OPTION) {
-                // Logik zum Löschen der Frage
-                questionDisplay.append("Frage gelöscht (Index " + index + ")\n");
-                dialog.dispose();
+        okButton.setActionCommand("delete_Frage_Ok");
+        okButton.addActionListener(tc);
+
+        dialogDeleteQuestion.add(inputPanel);
+        dialogDeleteQuestion.add(okButton);
+
+        dialogDeleteQuestion.setSize(400, 150);
+        dialogDeleteQuestion.setLocationRelativeTo(this);
+        dialogDeleteQuestion.setVisible(true);
+    }
+
+    //ADD QUESTION METHODEN
+    public void setfrageLabelADD(String text) {
+        if(text == null) return;
+        frageLabelA.setText(text);
+    }
+    public String getAddQuestionText() {
+        return frageFieldA.getText();
+    }
+    public String getAddQuestionTyp() {
+        return (String) typBoxA.getSelectedItem();
+    }
+    public String getAddAntwort() {
+        String antwort = antwortFieldA.getText();
+        String typ = (String) typBoxA.getSelectedItem();
+
+        if (antwort == null || antwort.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(dialogAddQuestion, "Bitte geben Sie eine Antwort ein.", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        // Typprüfung
+        if ("Integer".equalsIgnoreCase(typ)) {
+            try {
+                Integer.parseInt(antwort);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(dialogAddQuestion, "Die Antwort muss eine ganze Zahl sein.", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
+                return null;
             }
-        });
+        } else if ("Boolean".equalsIgnoreCase(typ)) {
+            if (!"true".equalsIgnoreCase(antwort) && !"false".equalsIgnoreCase(antwort)) {
+                JOptionPane.showMessageDialog(dialogAddQuestion, "Die Antwort muss 'true' oder 'false' sein.", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        }
 
-        dialog.add(inputPanel);
-        dialog.add(okButton);
+        return antwort;
+    }
+    public void disposeDialog(String dialogType) {
+        switch (dialogType) {
+            case "add" -> dialogAddQuestion.dispose();
+            case "edit" -> dialogEditQuestion.dispose();
+            case "delete" -> dialogDeleteQuestion.dispose();
+        }
+    }
+    ////
 
-        dialog.setSize(400, 150);
-        dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true);
+    // EDIT QUESION METHODEN
+    public int getEditIndex() {
+        try {
+            int index = Integer.parseInt(indexField_Edit.getText());
+            if (index < 0) {
+                throw new NumberFormatException();
+            }
+            return index;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(dialogEditQuestion, "Bitte geben Sie einen gültigen Index ein (positive Zahl).", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
+            return -1; // Ungültiger Index
+        }
+    }
+    public String getEditFrage() {
+        String frage = frageField_Edit.getText();
+        if (frage == null || frage.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(dialogEditQuestion, "Bitte geben Sie eine gültige neue Frage ein.", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        return frage;
+    }
+
+    public String getEditTyp() {
+        String typ = typField_Edit.getText();
+        if (typ == null || typ.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(dialogEditQuestion, "Bitte geben Sie einen gültigen neuen Typ ein.", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        return typ;
+    }
+    public String getEditAntwort() {
+        String antwort = antwortField_Edit.getText();
+        String typ = typField_Edit.getText();
+
+        if (antwort == null || antwort.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(dialogEditQuestion, "Bitte geben Sie eine neue Antwort ein.", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        // Typprüfung
+        if ("Integer".equalsIgnoreCase(typ)) {
+            try {
+                Integer.parseInt(antwort);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(dialogEditQuestion, "Die Antwort muss eine ganze Zahl sein.", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        } else if ("Boolean".equalsIgnoreCase(typ)) {
+            if (!"true".equalsIgnoreCase(antwort) && !"false".equalsIgnoreCase(antwort)) {
+                JOptionPane.showMessageDialog(dialogEditQuestion, "Die Antwort muss 'true' oder 'false' sein.", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        }
+
+        return antwort;
+    }
+
+    // LÖSCH QUESTION METHODEN
+    // Getter-Methode für Delete-Dialog
+    public int getDeleteIndex() {
+        try {
+            int index = Integer.parseInt(indexField_Delete.getText());
+            if (index < 0) {
+                throw new NumberFormatException();
+            }
+            return index;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(dialogDeleteQuestion, "Bitte geben Sie einen gültigen Index ein (positive Zahl).", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
+            return -1; // Ungültiger Index
+        }
+    }
+
+    public void addTextToQuestionDisplay(String action) {
+        // "Frage hinzugefügt: " + frage + " (" + typ + ") -> " + antwort + "\n"
+        // "Frage geändert (Index " + index + "): " + frage + " (" + typ + ") -> " + antwort + "\n"
+        // "Frage gelöscht (Index " + index + ")\n"
+        if(action != null) {
+            questionDisplay.append(action);
+        }
     }
 
 }

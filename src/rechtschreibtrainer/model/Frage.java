@@ -4,13 +4,16 @@ public class Frage {
     protected String text;
     private String antwort;
 
-    public Frage(String antwort, String loesung) {
+    public Frage(String antwort, String text) {
         setAntwort(antwort);
-        setFrageText(loesung);
+        setFrageText(text);
     }
 
     public Frage(String text) {
         setFrageText(text);
+    }
+
+    public Frage() {
     }
 
     public String getFrageText() {

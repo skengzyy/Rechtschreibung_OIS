@@ -5,28 +5,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class BildFrage extends Frage {
-    private String loesung;
 
-    // Constructor to initialize BildFrage object
+
     public BildFrage(String frage, String loesung) {
-        super(frage);
-        setLoesung(loesung);
+        setFrage(frage);
+        super.setAntwort(loesung);
     }
 
-    public String getLoesung() {
-        return loesung;
-    }
-
-    // Setter method to assign loesung with null-check
-    public void setLoesung(String loesung) {
-        if (loesung != null && !loesung.isEmpty()) {
-            this.loesung = loesung;
-        }
-    }
 
     @Override
     public boolean check(String antwort) {
-        return antwort != null && antwort.equals(this.loesung);
+        return antwort != null && antwort.equals(super.getAntwort());
     }
 
     public boolean isUrlSafe(String urlString) {
@@ -59,9 +48,18 @@ public class BildFrage extends Frage {
             return false;
         }
     }
+    public URL getFrage() throws MalformedURLException {
+        return new URL(super.getFrageText());
+    }
+
+    public void setFrage(String frage) {
+        if(isUrlSafe(frage)) {
+            super.setFrageText(frage);
+        };
+    }
 
     @Override
     public String toString() {
-        return super.getFrageText().concat(";").concat("Bild").concat(";").concat(getLoesung());
+        return super.getFrageText().concat(";").concat("Bild").concat(";").concat(getAntwort());
     }
 }

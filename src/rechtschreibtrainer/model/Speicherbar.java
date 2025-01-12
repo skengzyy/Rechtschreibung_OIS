@@ -1,8 +1,10 @@
 package rechtschreibtrainer.model;
+import java.io.*;
 
 public interface Speicherbar {
-    void speichern(String pfad);
-    Fragenpool laden(String pfad);
-    void speichern();
-    Fragenpool laden();
+    int MAXFRAGEN = 20;
+    void speichern(String pfad, String filename);
+    Fragenpool laden(File filename);
+
+
 }
