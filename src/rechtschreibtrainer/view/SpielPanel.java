@@ -146,6 +146,8 @@ public class SpielPanel extends JPanel {
 
         if(counter){
             this.currentCount += 1;
+        }else{
+            this.currentCount = 1;
         }
 
         counterLabel.setText(currentCount + "/" + totalQuestions);
