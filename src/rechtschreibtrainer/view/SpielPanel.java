@@ -142,5 +142,29 @@ public class SpielPanel extends JPanel {
             button.setOpaque(true);
         }
     }
+    public void resetSpielPanel(char[] neuerBuchstabenSalat, String neueAntwort, TrainerController tc, boolean counter){
+
+        if(counter){
+            this.currentCount += 1;
+        }
+
+        counterLabel.setText(currentCount + "/" + totalQuestions);
+
+        buchstabenSalat = neuerBuchstabenSalat;
+        richtigeAntwort = neueAntwort;
+        aktuelleAntwort = "";
+
+
+
+        buchstabenPanel.removeAll();
+        for (char buchstabe : neuerBuchstabenSalat) {
+            JButton button = createBuchstabenButton(buchstabe, tc);
+            buchstabenPanel.add(button);
+        }
+        buchstabenPanel.revalidate();
+        buchstabenPanel.repaint();
+
+        statusLabel.setText("");
+    }
 
 
