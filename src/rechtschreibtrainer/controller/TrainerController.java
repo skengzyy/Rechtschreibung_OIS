@@ -31,8 +31,9 @@ public class TrainerController implements ActionListener {
         fragenFrame = new FragenpoolFrame(fragenPanel);
         quizPanel = new QuizPanel(this);
         quizFrame = new QuizFrame(quizPanel);
-        char[] bs = {'A', 'N', 'D','L','I','E'};
-        spielPanel = new SpielPanel(this, bs);
+        //char[] bs = {'A', 'N', 'D','L','I','E'};
+        char[] bs = {'A', 'N', 'D','L','I','E','E', 'N', 'D','L','I','A'};
+        spielPanel = new SpielPanel(this, bs, "DANIELDANIEL");
         spielFrame = new SpielFrame(spielPanel);
 
         // Fenster-Events hinzufügen
@@ -75,7 +76,6 @@ public class TrainerController implements ActionListener {
         } else if (ac.equals("exit")) {
             System.exit(0);
         }
-        String richtigeAntwort = "DANIEL";
         if (ac.equals("spiel_abbrechen")) {
             spielFrame.setVisible(false);
             mf.setVisible(true);
@@ -84,31 +84,29 @@ public class TrainerController implements ActionListener {
             quizFrame.setVisible(false);
             mf.setVisible(true);
         }
-        /*
         else if (ac.startsWith("buchstabe_")) {
             char ausgewählterBuchstabe = ac.charAt(ac.length() - 1);
             spielPanel.addBuchstabeToAntwort(ausgewählterBuchstabe);
 
-            // Überprüfen, ob die Antwort korrekt ist
             String aktuelleEingabe = spielPanel.getAktuelleAntwort();
-            if (richtigeAntwort.startsWith(aktuelleEingabe)) {
-                // Teilweise korrekt
+            if (spielPanel.getRichtigeAntwort().startsWith(aktuelleEingabe)) {
+
                 spielPanel.highlightButton((JButton) e.getSource(), true);
 
-                if (aktuelleEingabe.equals(richtigeAntwort)) {
-                    // Vollständig korrekt
+                if (aktuelleEingabe.equals(spielPanel.getRichtigeAntwort())) {
                     spielPanel.updateStatus(true, aktuelleEingabe);
-                    // Nächste Frage laden
-                    // (Logik hier ergänzen, um Buchstabensalat und Antwort zu aktualisieren)
                 }
             } else {
-                // Falsch
                 spielPanel.highlightButton((JButton) e.getSource(), false);
                 spielPanel.updateStatus(false, aktuelleEingabe);
             }
+        }else if(ac.equals("resetSpielPanel")){
+            spielPanel.resetSpielPanel(new char[] {'N', 'E', 'U'}, "NEU", this, false);
+        }else if(ac.equals("spiel_next")){
+            spielPanel.resetSpielPanel(new char[] {'N', 'E', 'U'}, "NEU", this, true);
         }
 
-         */
+
 
     }
 }
