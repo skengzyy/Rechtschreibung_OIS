@@ -167,4 +167,14 @@ public class SpielPanel extends JPanel {
         statusLabel.setText("");
     }
 
+    public void addBuchstabeToAntwort(char buchstabe) {
+        aktuelleAntwort += buchstabe; // Buchstabe zur aktuellen Antwort hinzufügen
+    }
 
+    public String getAktuelleAntwort() {
+        return aktuelleAntwort;
+    }
+    public String getRichtigeAntwort(){
+        return richtigeAntwort;
+    }
+}
