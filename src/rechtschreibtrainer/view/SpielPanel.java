@@ -110,6 +110,37 @@ public class SpielPanel extends JPanel {
         add(bottomPanel, gbc);
     }
 
+    private JButton createBuchstabenButton(char buchstabe, TrainerController controller) {
+        JButton button = new JButton(String.valueOf(buchstabe));
+        button.setFont(new Font("Arial", Font.BOLD, 24));
+        button.setBackground(new Color(59, 89, 152));
+        button.setOpaque(true);
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setActionCommand("buchstabe_" + buchstabe);
+        button.addActionListener(controller);
+        return button;
+    }
 
+    public void updateStatus(boolean korrekt, String aktuelleEingabe) {
+        if (korrekt) {
+            statusLabel.setText("Richtig! Das richtige Wort: " + aktuelleEingabe);
+            statusLabel.setForeground(new Color(46, 204, 113));
+        } else {
+            statusLabel.setText("Falsch! Versuche es erneut.");
+            statusLabel.setForeground(new Color(231, 76, 60));
+        }
+    }
+
+    public void highlightButton(JButton button, boolean korrekt) {
+        if (korrekt) {
+            button.setBackground(new Color(46, 204, 113));
+            button.setOpaque(true);
+        } else {
+            button.setBackground(new Color(231, 76, 60));
+            button.setOpaque(true);
+        }
+    }
 
 
