@@ -34,9 +34,9 @@ public class MenüPanel extends JPanel {
         // Buttons erstellen
         verwalten = createStyledButton("Fragenpool laden//verwalten", buttonFont, new Color(59, 89, 152), Color.WHITE, "verwalten", controller);
         quizmode = createStyledButton("Quizmodus starten", buttonFont, new Color(46, 204, 113), Color.WHITE, "quizmode", controller);
-        quizmode.setEnabled(false);
+        quizmode.setEnabled(true);
         spielmode = createStyledButton("Spielmodus starten", buttonFont, new Color(241, 196, 15), Color.WHITE, "spielmode", controller);
-        spielmode.setEnabled(false);
+        spielmode.setEnabled(true);
         hilfe = createStyledButton("Hilfe", buttonFont, new Color(52, 152, 219), Color.WHITE, "hilfe", controller);
         exit = createStyledButton("Beenden", buttonFont, new Color(231, 76, 60), Color.WHITE, "exit", controller);
 
