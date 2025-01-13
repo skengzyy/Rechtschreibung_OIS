@@ -6,6 +6,8 @@ import rechtschreibtrainer.model.Frage;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import javax.sound.sampled.*;
+import java.io.*;
 
 public class SpielPanel extends JPanel {
 
@@ -14,11 +16,13 @@ public class SpielPanel extends JPanel {
     private int totalQuestions = 20;
     private JLabel frageLabel;
     private JPanel buchstabenPanel;
-    private JButton abbrechenButton, nextButton, resetButton;
+    private JButton abbrechenButton, nextButton, resetButton, startMusicButton, stopMusicButton;
     private JLabel statusLabel;
     private char[] buchstabenSalat;
     private String richtigeAntwort;
     private String aktuelleAntwort;
+    private Clip musicClip;
+
 
     public SpielPanel(TrainerController controller, char[] buchstabenSalat, String richtigeAntwort) {
         this.buchstabenSalat = buchstabenSalat;
@@ -105,6 +109,7 @@ public class SpielPanel extends JPanel {
         nextButton.addActionListener(controller);
         bottomPanel.add(nextButton);
 
+
         gbc.gridy = 2;
         gbc.weighty = 0.2;
         add(bottomPanel, gbc);
@@ -178,5 +183,30 @@ public class SpielPanel extends JPanel {
     }
     public String getRichtigeAntwort(){
         return richtigeAntwort;
+    }
+    private void initializeMusic(String filePath) {
+        try {
+            File audioFile = new File(filePath);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+            musicClip = AudioSystem.getClip();
+            musicClip.open(audioStream);
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            System.err.println("Fehler beim Laden der Musik: " + e.getMessage());
+        }
+    }
+
+    public void startMusic() {
+        initializeMusic("src/audio/ksi.wav");
+        if (musicClip != null && !musicClip.isRunning()) {
+            musicClip.setFramePosition(0);
+            musicClip.start();
+            musicClip.loop(Clip.LOOP_CONTINUOUSLY);
+        }
+    }
+
+    public void stopMusic() {
+        if (musicClip != null && musicClip.isRunning()) {
+            musicClip.stop();
+        }
     }
 }

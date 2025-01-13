@@ -1,11 +1,13 @@
 package rechtschreibtrainer.view;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.net.*;
 import java.io.*;
 import javax.imageio.ImageIO;
+import javax.sound.sampled.*;
 
 public class QuizPanel extends JPanel {
     private JButton nextButton;
@@ -13,6 +15,8 @@ public class QuizPanel extends JPanel {
     private JTextField answerField;
     private JLabel questionLabel;
     private JLabel counterLabel;
+
+    private Clip musicClip;
     private int currentQuestion = 1;
     private int totalQuestions = 20;
 
@@ -121,4 +125,31 @@ public class QuizPanel extends JPanel {
             counterLabel.setText(currentQuestion + "/" + totalQuestions);
         }
     }
+
+    private void initializeMusic(String filePath) {
+        try {
+            File audioFile = new File(filePath);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+            musicClip = AudioSystem.getClip();
+            musicClip.open(audioStream);
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            System.err.println("Fehler beim Laden der Musik: " + e.getMessage());
+        }
+    }
+
+    public void startMusic() {
+        initializeMusic("src/audio/kahoot.wav");
+        if (musicClip != null && !musicClip.isRunning()) {
+            musicClip.setFramePosition(0);
+            musicClip.start();
+            musicClip.loop(Clip.LOOP_CONTINUOUSLY);
+        }
+    }
+    public void stopMusic() {
+        if (musicClip != null && musicClip.isRunning()) {
+            musicClip.stop();
+        }
+    }
+
+
 }

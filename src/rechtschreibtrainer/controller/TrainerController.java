@@ -11,6 +11,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.*;
 
+
+
 public class TrainerController implements ActionListener {
     private MenüPanel mp;
     private MenüFrame mf;
@@ -70,9 +72,11 @@ public class TrainerController implements ActionListener {
             mf.setVisible(false);
             fragenFrame.setVisible(true);
         } else if (ac.equals("quizmode")) {
+            quizPanel.startMusic();
             mf.setVisible(false);
             quizFrame.setVisible(true);
         } else if (ac.equals("spielmode")) {
+            spielPanel.startMusic();
             mf.setVisible(false);
             spielFrame.setVisible(true);
         } else if (ac.equals("hilfe")) {
@@ -80,12 +84,10 @@ public class TrainerController implements ActionListener {
         } else if (ac.equals("exit")) {
             System.exit(0);
         }
+        //spielmodus
         if (ac.equals("spiel_abbrechen")) {
+            spielPanel.stopMusic();
             spielFrame.setVisible(false);
-            mf.setVisible(true);
-        }
-        if(ac.equals("quiz_abbrechen")) {
-            quizFrame.setVisible(false);
             mf.setVisible(true);
         }
         else if (ac.startsWith("buchstabe_")) {
@@ -123,6 +125,12 @@ public class TrainerController implements ActionListener {
             fragenPanel.showInfoDialog();
         }
 
+        //quizmodus
+        if(ac.equals("quiz_abbrechen")) {
+            quizPanel.stopMusic();
+            quizFrame.setVisible(false);
+            mf.setVisible(true);
+        }
 
 
     }
