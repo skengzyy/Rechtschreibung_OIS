@@ -5,17 +5,17 @@ import java.net.URL;
 
 public class MyFragenpool extends Fragenpool implements Speicherbar{
 
-    public MyFragenpool(int size, Frage[] fragenpool){
-        super(size, fragenpool);
 
+    public MyFragenpool(int size) {
+        super(size);
     }
 
     @Override
-    public void speichern(String pfad, String filename) {
-        if(pfad == null && filename == null) return;
-        File f = new File(pfad + filename);
+    public void speichern(String filename) {
+        if(filename == null) return;
+        File f = new File(filename);
         Frage[] pool = super.getFragenpool();
-        Rechtschreibtrainer trainer = new Rechtschreibtrainer(pool);
+        Rechtschreibtrainer trainer = new Rechtschreibtrainer(pool,1);
         try(PrintWriter outputStream = new PrintWriter(f)) {
             if(pool == null) return;
             if(pool.length <= MAXFRAGEN) {
@@ -34,18 +34,18 @@ public class MyFragenpool extends Fragenpool implements Speicherbar{
     }
 
     @Override
-    public Fragenpool laden(File file) {
+    public Rechtschreibtrainer laden(File file) {
         if (file == null) return null; // Wenn keine Datei übergeben wurde
 
         try (BufferedReader inputStream = new BufferedReader(new FileReader(file))) {
             String line = inputStream.readLine();
-            if (line == null || line.isEmpty()) return null; // Überprüfung auf leere Datei
+            if (line == null || line.isEmpty()) return null;
 
-            int fragenAnzahl = Integer.parseInt(line); // Erste Zeile: Anzahl der Fragen
+            int fragenAnzahl = Integer.parseInt(line);
 
             if(fragenAnzahl > MAXFRAGEN) return null;
             Frage[] fragen = new Frage[fragenAnzahl];
-            inputStream.readLine(); // "========" überspringen
+            inputStream.readLine();
             Frage text = null;
             for (int i = 0; i < fragenAnzahl; i++) {
                 String frageZeile = inputStream.readLine();
@@ -60,7 +60,7 @@ public class MyFragenpool extends Fragenpool implements Speicherbar{
                     }if(question[1].equals("Boolean")) {
                         text = new BooleanFrage(question[0],Boolean.parseBoolean(question[2]));
                     } if(question[1].equals("Bild")) {
-                        text = new BildFrage(new URL(question[0]), question[2]);
+                        text = new BildFrage(question[0], question[2]);
                     }
                     fragen[i] = text;
                 }

@@ -6,6 +6,7 @@ import rechtschreibtrainer.model.Frage;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.nio.file.Path;
 
 public class FragenpoolPanel extends JPanel {
 
@@ -23,6 +24,7 @@ public class FragenpoolPanel extends JPanel {
     private JTextField frageFieldA,antwortFieldA;
     private final  String[] typenAdd = {"String", "Bild", "Integer", "Boolean"};
     private final JComboBox typBoxA = new JComboBox(typenAdd);
+    private final JComboBox typBoxE = new JComboBox(typenAdd);
 
     //editQuestion attribute
 
@@ -62,11 +64,12 @@ public class FragenpoolPanel extends JPanel {
         infoButton.setFocusable(false);
 
 
-        loadButton.addActionListener(e -> loadQuestions());
-
-        saveButton.addActionListener(e -> saveQuestions());
-
-        infoButton.addActionListener(e -> showInfoDialog());
+        loadButton.setActionCommand("load_fragenpool");
+        loadButton.addActionListener(tc);
+        saveButton.setActionCommand("save_fragenpool");
+        saveButton.addActionListener(tc);
+        infoButton.setActionCommand("info_fragenpool");
+        infoButton.addActionListener(tc);
 
 
         toolBar.add(loadButton);
@@ -110,6 +113,7 @@ public class FragenpoolPanel extends JPanel {
         deleteButton.setBorderPainted(false);
 
         addButton.addActionListener(e -> addQuestion());
+
         editButton.addActionListener(e -> editQuestion());
         deleteButton.addActionListener(e -> deleteQuestion());
 
@@ -136,7 +140,7 @@ public class FragenpoolPanel extends JPanel {
     }
 
 
-    private void saveQuestions() {
+    public String saveQuestions() {
         if (fileChooser == null) {
             fileChooser = new JFileChooser();
         }
@@ -147,11 +151,14 @@ public class FragenpoolPanel extends JPanel {
 
             File file = fileChooser.getSelectedFile() ;
             System.out.println("Datei gespeichert unter: " + file.getAbsolutePath());
+            return file.getAbsolutePath();
         }
+        return null;
     }
 
 
-    private void loadQuestions() {
+    public File loadQuestions() {
+        File file = null;
         if (fileChooser == null) {
             fileChooser = new JFileChooser();
             fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
@@ -169,17 +176,18 @@ public class FragenpoolPanel extends JPanel {
         int returnValue = fileChooser.showOpenDialog(this);
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
+             file = fileChooser.getSelectedFile();
             if (!file.getName().toLowerCase().endsWith(".txt")) {
                 JOptionPane.showMessageDialog(this, "Bitte wählen Sie eine gültige .txt-Datei aus.", "Ungültige Datei", JOptionPane.ERROR_MESSAGE);
-                return;
+                return null;
             }
             JOptionPane.showMessageDialog(this, "Datei erfolgreich ausgewählt: " + file.getAbsolutePath(), "Erfolg", JOptionPane.INFORMATION_MESSAGE);
             System.out.println("Ausgewählte Datei: " + file.getAbsolutePath());
         }
+        return file;
     }
 
-    private void showInfoDialog() {
+    public void showInfoDialog() {
         JOptionPane.showMessageDialog(this,
                 "Im Fragenpool Verwaltungsdialog können Sie Fragen bearbeiten, hinzufügen, löschen und aus einer Datei laden. \n Laden - Erstes Button oben. \n Speichern - Zweites Button vor Info",
                 "Info",
@@ -225,12 +233,15 @@ public class FragenpoolPanel extends JPanel {
 
         JLabel frageLabel_Edit = new JLabel("Neue Frage:");
         frageField_Edit = new JTextField();
+        frageLabel_Edit.setEnabled(false);
 
         JLabel typLabel_Edit = new JLabel("Neuer Typ:");
-        typField_Edit = new JTextField();
+        typBoxE.setEnabled(false);
+
 
         JLabel antwortLabel_Edit = new JLabel("Neue Antwort:");
         antwortField_Edit = new JTextField();
+        frageLabel_Edit.setEnabled(false);
 
         JButton okButton_Edit = new JButton("OK");
         okButton_Edit.setActionCommand("edit_Frage_Ok");
@@ -241,7 +252,7 @@ public class FragenpoolPanel extends JPanel {
         dialogEditQuestion.add(frageLabel_Edit);
         dialogEditQuestion.add(frageField_Edit);
         dialogEditQuestion.add(typLabel_Edit);
-        dialogEditQuestion.add(typField_Edit);
+        dialogEditQuestion.add(typBoxE);
         dialogEditQuestion.add(antwortLabel_Edit);
         dialogEditQuestion.add(antwortField_Edit);
         dialogEditQuestion.add(new JLabel());
@@ -332,6 +343,13 @@ public class FragenpoolPanel extends JPanel {
             return -1; // Ungültiger Index
         }
     }
+    public void enableEdit(boolean yes) {
+        if(yes) {
+            frageField_Edit.setEnabled(true);
+        } else {
+            frageField_Edit.setEnabled(false);
+        }
+    }
     public String getEditFrage() {
         String frage = frageField_Edit.getText();
         if (frage == null || frage.trim().isEmpty()) {
@@ -341,13 +359,12 @@ public class FragenpoolPanel extends JPanel {
         return frage;
     }
 
-    public String getEditTyp() {
-        String typ = typField_Edit.getText();
-        if (typ == null || typ.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(dialogEditQuestion, "Bitte geben Sie einen gültigen neuen Typ ein.", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
-            return null;
+    public void enableAntwortEdit(boolean yes) {
+        if(yes) {
+            antwortField_Edit.setEnabled(true);
+        } else {
+            antwortField_Edit.setEnabled(false);
         }
-        return typ;
     }
     public String getEditAntwort() {
         String antwort = antwortField_Edit.getText();
@@ -398,6 +415,14 @@ public class FragenpoolPanel extends JPanel {
         if(action != null) {
             questionDisplay.append(action);
         }
+    }
+    public void showErrorMessage(String dialogType) {
+        switch (dialogType) {
+            case "add" -> JOptionPane.showMessageDialog(dialogAddQuestion, "Eine oder mehrere der Eingaben sind ungültig", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
+            case "edit" -> JOptionPane.showMessageDialog(dialogEditQuestion, "Eine oder mehrere der Eingaben sind ungültig", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
+            case "delete" -> JOptionPane.showMessageDialog(dialogDeleteQuestion, "Eine oder mehrere der Eingaben sind ungültig", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
 }

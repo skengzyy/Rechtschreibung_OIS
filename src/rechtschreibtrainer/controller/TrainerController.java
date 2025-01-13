@@ -1,5 +1,7 @@
 package rechtschreibtrainer.controller;
 
+import rechtschreibtrainer.model.MyFragenpool;
+import rechtschreibtrainer.model.Rechtschreibtrainer;
 import rechtschreibtrainer.view.*;
 
 import javax.swing.*;
@@ -7,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.IOException;
+import java.io.*;
 
 public class TrainerController implements ActionListener {
     private MenüPanel mp;
@@ -18,6 +20,9 @@ public class TrainerController implements ActionListener {
     private QuizFrame quizFrame;
     private SpielPanel spielPanel;
     private SpielFrame spielFrame;
+
+    private MyFragenpool fragenpool = new MyFragenpool(20);
+    private Rechtschreibtrainer trainer;
 
     public static void main(String[] args) throws IOException {
         new TrainerController();
@@ -38,7 +43,6 @@ public class TrainerController implements ActionListener {
 
         // Fenster-Events hinzufügen
         fragenFrame.addWindowListener(createWindowListener(mf, fragenFrame));
-        quizFrame.addWindowListener(createWindowListener(mf, quizFrame));
     }
 
     private WindowListener createWindowListener(JFrame mainFrame, JFrame childFrame) {
@@ -106,7 +110,21 @@ public class TrainerController implements ActionListener {
             spielPanel.resetSpielPanel(new char[] {'N', 'E', 'U'}, "NEU", this, true);
         }
 
+        //fragenpool verwaltung
+        if(ac.equals("load_fragenpool")) {
+            File f = fragenPanel.loadQuestions();
+            trainer = fragenpool.laden(f);
+            mp.enabledModes(true);
+
+        } else if(ac.equals("save_fragenpool")) {
+            fragenPanel.saveQuestions();
+            fragenpool.speichern(fragenPanel.saveQuestions());
+        } else if(ac.equals("info_fragenpool")) {
+            fragenPanel.showInfoDialog();
+        }
+
 
 
     }
+
 }

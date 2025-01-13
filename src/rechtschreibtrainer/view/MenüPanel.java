@@ -32,9 +32,11 @@ public class MenüPanel extends JPanel {
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50)); // Außenabstand
 
         // Buttons erstellen
-        verwalten = createStyledButton("Fragenpool verwalten", buttonFont, new Color(59, 89, 152), Color.WHITE, "verwalten", controller);
+        verwalten = createStyledButton("Fragenpool laden//verwalten", buttonFont, new Color(59, 89, 152), Color.WHITE, "verwalten", controller);
         quizmode = createStyledButton("Quizmodus starten", buttonFont, new Color(46, 204, 113), Color.WHITE, "quizmode", controller);
+        quizmode.setEnabled(false);
         spielmode = createStyledButton("Spielmodus starten", buttonFont, new Color(241, 196, 15), Color.WHITE, "spielmode", controller);
+        spielmode.setEnabled(false);
         hilfe = createStyledButton("Hilfe", buttonFont, new Color(52, 152, 219), Color.WHITE, "hilfe", controller);
         exit = createStyledButton("Beenden", buttonFont, new Color(231, 76, 60), Color.WHITE, "exit", controller);
 
@@ -61,5 +63,15 @@ public class MenüPanel extends JPanel {
         button.addActionListener(controller);
 
         return button;
+    }
+
+    public void enabledModes(boolean yes) {
+        if(yes) {
+            quizmode.setEnabled(true);
+            spielmode.setEnabled(true);
+        } else {
+            quizmode.setEnabled(false);
+            spielmode.setEnabled(false);
+        }
     }
 }

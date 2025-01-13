@@ -3,21 +3,16 @@ package rechtschreibtrainer.model;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Fragenpool {
+    private int size;
     private Frage[] fragenpool;
-    private int[] size;
 
-    protected Fragenpool(int size, Frage[] fragenpool){
+    protected Fragenpool(int size){
         if(size > 0){
-            this.size = new int[size];
+            this.size = size;
         }else{
             System.err.println("given size too small");
         }
 
-        if(fragenpool.length > 0){
-            this.fragenpool = fragenpool;
-        }else{
-            System.err.println("given fragenpool too small");
-        }
     }
 
     protected boolean addFrage(Frage frage){

@@ -4,7 +4,6 @@ public class Rechtschreibtrainer {
     private Frage[] fragenpool;
     private int countAbgefragt;
     private int countRichtige, countFalsche, anzahlVersuche;
-    private Spielmodus spielmodus;
 
     public Rechtschreibtrainer(Frage[] fragenpool, int anzahlVersuche) {
         setFragenpool(fragenpool);
@@ -37,17 +36,7 @@ public class Rechtschreibtrainer {
 
     public void setCountRichtige(int countRichtige) {
         if(countRichtige >= 0) {
-            this.spielmodus = spielmodus;
-        }
-    }
-
-    public Spielmodus getSpielmodus() {
-        return spielmodus;
-    }
-
-    public void setSpielmodus(Spielmodus spielmodus) {
-        if(spielmodus != null) {
-            this.spielmodus = spielmodus;
+            this.countRichtige = countRichtige;
         }
     }
 
