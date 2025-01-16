@@ -59,8 +59,10 @@ public class MyFragenpool extends Fragenpool implements Speicherbar{
                         text = new IntegerFrage(question[0],Integer.parseInt(question[2]));
                     }if(question[1].equals("Boolean")) {
                         text = new BooleanFrage(question[0],Boolean.parseBoolean(question[2]));
-                    } if(question[1].equals("Bild")) {
+                    }if(question[1].equals("Bild")) {
                         text = new BildFrage(question[0], question[2]);
+                    }if(question[1].equals("Wortsalat")) {
+                        text = new WortsalatFrage(question[2], question[0]);
                     }
                     fragen[i] = text;
                 }
@@ -73,7 +75,7 @@ public class MyFragenpool extends Fragenpool implements Speicherbar{
 
             // Rückgabe des geladenen Fragenpools
             //return new Fragenpool(fragen, anzahlVersuche);
-            return null;
+            return trainer;
 
         } catch (IOException | NumberFormatException e) {
             throw new RuntimeException("Fehler beim Laden der Datei: " + e.getMessage(), e);
