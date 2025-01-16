@@ -1,16 +1,20 @@
 package rechtschreibtrainer.controller;
 
+import rechtschreibtrainer.model.BildFrage;
 import rechtschreibtrainer.model.MyFragenpool;
 import rechtschreibtrainer.model.Rechtschreibtrainer;
 import rechtschreibtrainer.view.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.*;
-
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 public class TrainerController implements ActionListener {
@@ -22,6 +26,7 @@ public class TrainerController implements ActionListener {
     private QuizFrame quizFrame;
     private SpielPanel spielPanel;
     private SpielFrame spielFrame;
+    private int index = 0;
 
     private MyFragenpool fragenpool = new MyFragenpool(20);
     private Rechtschreibtrainer trainer;
@@ -116,6 +121,36 @@ public class TrainerController implements ActionListener {
         if(ac.equals("load_fragenpool")) {
             File f = fragenPanel.loadQuestions();
             trainer = fragenpool.laden(f);
+            if(trainer.getFragenpool() != null) {
+                for(int i = 0; i < trainer.getFragenpool().length;i++ ) {
+                    if(trainer.getFragenpool()[i] != null) {
+                        fragenPanel.addTextToQuestionDisplay(i + ". " +trainer.getFragenpool()[i].toString());
+                    }
+                }
+            }
+
+            if(trainer.getFragenpool()[0] != null && !(trainer.getFragenpool()[0] instanceof BildFrage)) {
+                quizPanel.updatePanel(trainer.getFragenpool()[0].getFrageText());
+            } else if(trainer.getFragenpool()[0] instanceof BildFrage) {
+                Image image = null;
+                URL url = null;
+                try {
+                    url = new URL(trainer.getFragenpool()[0].getFrageText());
+                } catch (MalformedURLException ex) {
+                    throw new RuntimeException(ex);
+                }
+                try {
+                    image = ImageIO.read(url);
+                } catch (IOException ex) {
+
+                    throw new RuntimeException(ex);
+                }
+                try {
+                    quizPanel.updatePanel(url);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
             mp.enabledModes(true);
 
         } else if(ac.equals("save_fragenpool")) {
@@ -130,6 +165,31 @@ public class TrainerController implements ActionListener {
             quizPanel.stopMusic();
             quizFrame.setVisible(false);
             mf.setVisible(true);
+        }
+        if(ac.equals("next_quizmode")) {
+            index += 1;
+            if(trainer.getFragenpool()[index] != null && !(trainer.getFragenpool()[index] instanceof BildFrage)) {
+                quizPanel.updatePanel(trainer.getFragenpool()[index].getFrageText());
+            } else if(trainer.getFragenpool()[index] instanceof BildFrage) {
+                Image image = null;
+                URL url = null;
+                try {
+                    url = new URL(trainer.getFragenpool()[index].getFrageText());
+                } catch (MalformedURLException ex) {
+                    throw new RuntimeException(ex);
+                }
+                try {
+                    image = ImageIO.read(url);
+                } catch (IOException ex) {
+
+                    throw new RuntimeException(ex);
+                }
+                try {
+                    quizPanel.updatePanel(url);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
         }
 
 
