@@ -45,7 +45,7 @@ public class TrainerController implements ActionListener {
         quizFrame = new QuizFrame(quizPanel);
         //char[] bs = {'A', 'N', 'D','L','I','E'};
         char[] bs = {'A', 'N', 'D','L','I','E','E', 'N', 'D','L','I','A'};
-        spielPanel = new SpielPanel(this, bs, "DANIELDANIEL");
+        spielPanel = new SpielPanel(this, trainer.getFragenpool()[index]);
         spielFrame = new SpielFrame(spielPanel);
 
         // Fenster-Events hinzufügen
@@ -112,9 +112,11 @@ public class TrainerController implements ActionListener {
                 spielPanel.updateStatus(false, aktuelleEingabe);
             }
         }else if(ac.equals("resetSpielPanel")){
-            spielPanel.resetSpielPanel(new char[] {'N', 'E', 'U'}, "NEU", this, false);
+            index = 0;
+            spielPanel.resetSpielPanel(trainer.getFragenpool()[index], this, false);
         }else if(ac.equals("spiel_next")){
-            spielPanel.resetSpielPanel(new char[] {'N', 'E', 'U'}, "NEU", this, true);
+            index++;
+            spielPanel.resetSpielPanel(trainer.getFragenpool()[index], this, true);
         }
 
         //fragenpool verwaltung

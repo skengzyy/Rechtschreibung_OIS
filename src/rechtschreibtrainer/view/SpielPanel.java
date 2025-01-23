@@ -2,6 +2,7 @@ package rechtschreibtrainer.view;
 
 import rechtschreibtrainer.controller.TrainerController;
 import rechtschreibtrainer.model.Frage;
+import rechtschreibtrainer.model.WortsalatFrage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,9 +25,9 @@ public class SpielPanel extends JPanel {
     private Clip musicClip;
 
 
-    public SpielPanel(TrainerController controller, char[] buchstabenSalat, String richtigeAntwort) {
-        this.buchstabenSalat = buchstabenSalat;
-        this.richtigeAntwort = richtigeAntwort;
+    public SpielPanel(TrainerController controller, Frage ersteFrage) {
+        this.buchstabenSalat = ersteFrage.getFrageText().toCharArray();
+        this.richtigeAntwort = ersteFrage.getAntwort();
         this.aktuelleAntwort = "";
 
         setLayout(new GridBagLayout());
@@ -147,7 +148,7 @@ public class SpielPanel extends JPanel {
             button.setOpaque(true);
         }
     }
-    public void resetSpielPanel(char[] neuerBuchstabenSalat, String neueAntwort, TrainerController tc, boolean counter){
+    public void resetSpielPanel(Frage neuerBuchstabenSalat, TrainerController tc, boolean counter){
 
         if(counter){
             this.currentCount += 1;
@@ -157,14 +158,14 @@ public class SpielPanel extends JPanel {
 
         counterLabel.setText(currentCount + "/" + totalQuestions);
 
-        buchstabenSalat = neuerBuchstabenSalat;
-        richtigeAntwort = neueAntwort;
+        buchstabenSalat = neuerBuchstabenSalat.getFrage().toCharArray();
+        richtigeAntwort = neuerBuchstabenSalat.getAntwort();
         aktuelleAntwort = "";
 
 
 
         buchstabenPanel.removeAll();
-        for (char buchstabe : neuerBuchstabenSalat) {
+        for (char buchstabe : buchstabenSalat) {
             JButton button = createBuchstabenButton(buchstabe, tc);
             buchstabenPanel.add(button);
         }
