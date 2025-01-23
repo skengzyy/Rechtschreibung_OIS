@@ -196,7 +196,7 @@ public class SpielPanel extends JPanel {
     }
 
     public void startMusic() {
-        initializeMusic("src/audio/ksi.wav");
+        initializeMusic("src/audio/brhymes.wav");
         if (musicClip != null && !musicClip.isRunning()) {
             musicClip.setFramePosition(0);
             musicClip.start();

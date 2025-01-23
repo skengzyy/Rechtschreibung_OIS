@@ -10,37 +10,36 @@ public class MenüPanel extends JPanel {
     private JLabel titel;
 
     public MenüPanel(TrainerController controller) {
-        // Setze GridLayout (5x1 für Buttons + 1 Zeile für Titel)
-        this.setLayout(new BorderLayout());
-        this.setBackground(new Color(40, 44, 52)); // Dunkles Thema
 
-        // Fonts
+        this.setLayout(new BorderLayout());
+        this.setBackground(new Color(40, 44, 52));
+
+        // fonts
         Font titelFont = new Font("Arial", Font.BOLD, 32);
         Font buttonFont = new Font("Arial", Font.PLAIN, 18);
 
-        // Titel
+        // titel
         titel = new JLabel("SpellWeaver - Rechtschreibtrainer", JLabel.CENTER);
         titel.setFont(titelFont);
-        titel.setForeground(new Color(230, 230, 230)); // Helle Schrift
-        titel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0)); // Abstände
+        titel.setForeground(new Color(230, 230, 230));
+        titel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         this.add(titel, BorderLayout.NORTH);
 
-        // Panel für die Buttons
+        // button panel
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(5, 1, 10, 10)); // 5 Reihen, gleichmäßige Abstände
-        buttonPanel.setBackground(new Color(40, 44, 52)); // Gleicher Hintergrund wie Hauptpanel
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50)); // Außenabstand
+        buttonPanel.setLayout(new GridLayout(5, 1, 10, 10));
+        buttonPanel.setBackground(new Color(40, 44, 52));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
 
-        // Buttons erstellen
+        // button erstellen
         verwalten = createStyledButton("Fragenpool laden//verwalten", buttonFont, new Color(59, 89, 152), Color.WHITE, "verwalten", controller);
         quizmode = createStyledButton("Quizmodus starten", buttonFont, new Color(46, 204, 113), Color.WHITE, "quizmode", controller);
-        quizmode.setEnabled(true);
+        quizmode.setEnabled(false);
         spielmode = createStyledButton("Spielmodus starten", buttonFont, new Color(241, 196, 15), Color.WHITE, "spielmode", controller);
-        spielmode.setEnabled(true);
+        spielmode.setEnabled(false);
         hilfe = createStyledButton("Hilfe", buttonFont, new Color(52, 152, 219), Color.WHITE, "hilfe", controller);
         exit = createStyledButton("Beenden", buttonFont, new Color(231, 76, 60), Color.WHITE, "exit", controller);
 
-        // Buttons hinzufügen
         buttonPanel.add(verwalten);
         buttonPanel.add(quizmode);
         buttonPanel.add(spielmode);
@@ -50,7 +49,16 @@ public class MenüPanel extends JPanel {
         this.add(buttonPanel, BorderLayout.CENTER);
     }
 
-    // Hilfsmethode zum Erstellen von Buttons
+    /**
+     * Methode die die Buttons erstellts(um Code verdopplung zu vermeiden
+     * @param text die text des Buttons
+     * @param font font des texts
+     * @param bgColor farbe der button
+     * @param fgColor farbe des text
+     * @param actionCommand actioncommand fur controller
+     * @param controller controller verbindeung
+     * @return die erstetlle button als JButton
+     */
     private JButton createStyledButton(String text, Font font, Color bgColor, Color fgColor, String actionCommand, TrainerController controller) {
         JButton button = new JButton(text);
         button.setFont(font);

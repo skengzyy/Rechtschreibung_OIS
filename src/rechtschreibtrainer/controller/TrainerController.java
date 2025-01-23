@@ -77,7 +77,7 @@ public class TrainerController implements ActionListener {
             mf.setVisible(false);
             fragenFrame.setVisible(true);
         } else if (ac.equals("quizmode")) {
-            quizPanel.startMusic();
+            quizPanel.toggleMusic();
             mf.setVisible(false);
             quizFrame.setVisible(true);
         } else if (ac.equals("spielmode")) {
@@ -125,7 +125,12 @@ public class TrainerController implements ActionListener {
                 for(int i = 0; i < trainer.getFragenpool().length;i++ ) {
                     if(trainer.getFragenpool()[i] != null) {
                         fragenPanel.addTextToQuestionDisplay(i + ". " +trainer.getFragenpool()[i].toString());
+                        //gleichzeitig die fragen zu myfragenpool hinzufugune
+                        if(this.fragenpool!= null) {
+                            fragenpool.addFrage(trainer.getFragenpool()[i]);
+                        }
                     }
+
                 }
             }
 
@@ -158,6 +163,18 @@ public class TrainerController implements ActionListener {
             fragenpool.speichern(fragenPanel.saveQuestions());
         } else if(ac.equals("info_fragenpool")) {
             fragenPanel.showInfoDialog();
+        }
+        //fragen hinzufügen, ändern oder löschen
+        if(ac.equals("delete_Frage_Ok")) {
+            int index = fragenPanel.getDeleteIndex();
+            fragenPanel.addTextToQuestionDisplay("\"Frage gelöscht (Index \" " + index +" \")\\n\"");
+            if(index != -1) fragenpool.deleteFrage(index);
+        }
+        if(ac.equals("add_Frage_Ok")){
+
+        }
+        if(ac.equals("edit_Frage_Ok")) {
+
         }
 
         //quizmodus

@@ -413,7 +413,7 @@ public class FragenpoolPanel extends JPanel {
         // "Frage geändert (Index " + index + "): " + frage + " (" + typ + ") -> " + antwort + "\n"
         // "Frage gelöscht (Index " + index + ")\n"
         if(action != null) {
-            questionDisplay.append(action);
+            questionDisplay.append("\n" + action);
         }
     }
     public void showErrorMessage(String dialogType) {
@@ -424,5 +424,6 @@ public class FragenpoolPanel extends JPanel {
         }
 
     }
+
 
 }

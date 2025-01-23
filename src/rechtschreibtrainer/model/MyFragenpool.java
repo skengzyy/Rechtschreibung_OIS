@@ -35,7 +35,7 @@ public class MyFragenpool extends Fragenpool implements Speicherbar{
 
     @Override
     public Rechtschreibtrainer laden(File file) {
-        if (file == null) return null; // Wenn keine Datei übergeben wurde
+        if (file == null) return null;
 
         try (BufferedReader inputStream = new BufferedReader(new FileReader(file))) {
             String line = inputStream.readLine();
@@ -73,7 +73,7 @@ public class MyFragenpool extends Fragenpool implements Speicherbar{
 
             // Rückgabe des geladenen Fragenpools
             //return new Fragenpool(fragen, anzahlVersuche);
-            return null;
+            return trainer;
 
         } catch (IOException | NumberFormatException e) {
             throw new RuntimeException("Fehler beim Laden der Datei: " + e.getMessage(), e);

@@ -8,7 +8,8 @@ public class QuizFrame extends JFrame {
         super("Quizmodus");
         this.add(panel);
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        this.setSize(800, 700);
+        this.setSize(800, 500);
+
         this.setLocationRelativeTo((Component)null);
         this.setVisible(false);
     }

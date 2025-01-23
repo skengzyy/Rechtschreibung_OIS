@@ -39,6 +39,12 @@ public class Rechtschreibtrainer {
             this.countRichtige = countRichtige;
         }
     }
+    public void addCountAbgefragt() {
+        this.countAbgefragt++;
+    }
+    public void addCountRichtige() {
+        this.countRichtige++;
+    }
 
     public int getAnzahlVersuche() {
         return anzahlVersuche;
