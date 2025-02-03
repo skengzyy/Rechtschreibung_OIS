@@ -18,13 +18,13 @@ public class FragenpoolPanel extends JPanel {
     private JDialog dialogAddQuestion, dialogEditQuestion, dialogDeleteQuestion;
     //addQuestion attribute
 
-    private JLabel frageLabelA,typLabelA,antwortLabelA;
+    private JLabel frageLabelA,typLabelA,antwortLabelA, antwortLabel_Edit, typLabel_Edit, frageLabel_Edit, indexLabel_Edit;
     private JTextField indexField_Edit, frageField_Edit, typField_Edit, antwortField_Edit;
     private JTextField indexField_Delete;
     private JTextField frageFieldA,antwortFieldA;
     private final  String[] typenAdd = {"String", "Bild", "Integer", "Boolean"};
     private final JComboBox typBoxA = new JComboBox(typenAdd);
-    private final JComboBox typBoxE = new JComboBox(typenAdd);
+
 
     //editQuestion attribute
 
@@ -112,10 +112,14 @@ public class FragenpoolPanel extends JPanel {
         deleteButton.setOpaque(true);
         deleteButton.setBorderPainted(false);
 
-        addButton.addActionListener(e -> addQuestion());
+        addButton.setActionCommand("add_Frage_Dialog");
+        addButton.addActionListener(tc);
 
-        editButton.addActionListener(e -> editQuestion());
-        deleteButton.addActionListener(e -> deleteQuestion());
+        editButton.setActionCommand("edit_Frage_Dialog");
+        editButton.addActionListener(tc);
+
+        deleteButton.setActionCommand("delete_Frage_Dialog");
+        deleteButton.addActionListener(tc);
 
 
         buttonPanel.add(addButton);
@@ -195,7 +199,7 @@ public class FragenpoolPanel extends JPanel {
     }
 
 
-    private void addQuestion() {
+    public void addQuestion() {
         JDialog dialog = new JDialog((Frame) null, "Frage Hinzufügen", true);
         dialog.setLayout(new GridLayout(4, 2, 10, 10));
 
@@ -224,24 +228,27 @@ public class FragenpoolPanel extends JPanel {
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
     }
-    private void editQuestion() {
+    public void editQuestion() {
         dialogEditQuestion = new JDialog((Frame) null, "Frage Ändern", true);
         dialogEditQuestion.setLayout(new GridLayout(5, 2, 10, 10));
 
-        JLabel indexLabel_Edit = new JLabel("Index:");
+        indexLabel_Edit = new JLabel("Nummer:");
         indexField_Edit = new JTextField();
+        indexField_Edit.setActionCommand("edit_Frage_index");
+        indexField_Edit.addActionListener(tc);
 
-        JLabel frageLabel_Edit = new JLabel("Neue Frage:");
+        frageLabel_Edit = new JLabel("Neue Frage:");
         frageField_Edit = new JTextField();
-        frageLabel_Edit.setEnabled(false);
+        frageField_Edit.setEnabled(false);
 
-        JLabel typLabel_Edit = new JLabel("Neuer Typ:");
-        typBoxE.setEnabled(false);
+        typLabel_Edit = new JLabel("Typ:");
+        typField_Edit = new JTextField();
+        typField_Edit.setEnabled(false);
 
 
-        JLabel antwortLabel_Edit = new JLabel("Neue Antwort:");
+        antwortLabel_Edit = new JLabel("Neue Antwort:");
         antwortField_Edit = new JTextField();
-        frageLabel_Edit.setEnabled(false);
+
 
         JButton okButton_Edit = new JButton("OK");
         okButton_Edit.setActionCommand("edit_Frage_Ok");
@@ -252,7 +259,7 @@ public class FragenpoolPanel extends JPanel {
         dialogEditQuestion.add(frageLabel_Edit);
         dialogEditQuestion.add(frageField_Edit);
         dialogEditQuestion.add(typLabel_Edit);
-        dialogEditQuestion.add(typBoxE);
+        dialogEditQuestion.add(typField_Edit);
         dialogEditQuestion.add(antwortLabel_Edit);
         dialogEditQuestion.add(antwortField_Edit);
         dialogEditQuestion.add(new JLabel());
@@ -283,13 +290,12 @@ public class FragenpoolPanel extends JPanel {
         dialogDeleteQuestion.setLocationRelativeTo(this);
         dialogDeleteQuestion.setVisible(true);
     }
-
     //ADD QUESTION METHODEN
-    public void setfrageLabelADD(String text) {
-        if(text == null) return;
-        frageLabelA.setText(text);
-    }
+
     public String getAddQuestionText() {
+        if(frageFieldA.getText() == null) {
+            showErrorMessage("add", "Ungueltige Eingabe fúr den Text");
+        }
         return frageFieldA.getText();
     }
     public String getAddQuestionTyp() {
@@ -321,13 +327,7 @@ public class FragenpoolPanel extends JPanel {
 
         return antwort;
     }
-    public void disposeDialog(String dialogType) {
-        switch (dialogType) {
-            case "add" -> dialogAddQuestion.dispose();
-            case "edit" -> dialogEditQuestion.dispose();
-            case "delete" -> dialogDeleteQuestion.dispose();
-        }
-    }
+
     ////
 
     // EDIT QUESION METHODEN
@@ -366,7 +366,7 @@ public class FragenpoolPanel extends JPanel {
             antwortField_Edit.setEnabled(false);
         }
     }
-    public String getEditAntwort() {
+     public String getEditAntwort() {
         String antwort = antwortField_Edit.getText();
         String typ = typField_Edit.getText();
 
@@ -375,7 +375,6 @@ public class FragenpoolPanel extends JPanel {
             return null;
         }
 
-        // Typprüfung
         if ("Integer".equalsIgnoreCase(typ)) {
             try {
                 Integer.parseInt(antwort);
@@ -393,6 +392,23 @@ public class FragenpoolPanel extends JPanel {
         return antwort;
     }
 
+    public void setEditText(String text) {
+        if(text != null) {
+            frageField_Edit.setText(text);
+        }
+    }
+    public void setEditTyp(String typ) {
+         typField_Edit.setText(typ);
+    }
+    public void setEditAntwort(String text){
+        if(text != null) {
+            antwortField_Edit.setText(text);
+        }
+    }
+    public void setEditFrageText(String text) {
+        this.frageLabel_Edit.setText(text);
+    }
+
     // LÖSCH QUESTION METHODEN
     // Getter-Methode für Delete-Dialog
     public int getDeleteIndex() {
@@ -407,7 +423,6 @@ public class FragenpoolPanel extends JPanel {
             return -1; // Ungültiger Index
         }
     }
-
     public void addTextToQuestionDisplay(String action) {
         // "Frage hinzugefügt: " + frage + " (" + typ + ") -> " + antwort + "\n"
         // "Frage geändert (Index " + index + "): " + frage + " (" + typ + ") -> " + antwort + "\n"
@@ -416,14 +431,28 @@ public class FragenpoolPanel extends JPanel {
             questionDisplay.append("\n" + action);
         }
     }
-    public void showErrorMessage(String dialogType) {
+    public void clearQuestionDisplay() {
+        if (questionDisplay != null) {
+            questionDisplay.setText("");
+        }
+    }
+    public void showErrorMessage(String dialogType, String text) {
         switch (dialogType) {
             case "add" -> JOptionPane.showMessageDialog(dialogAddQuestion, "Eine oder mehrere der Eingaben sind ungültig", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
             case "edit" -> JOptionPane.showMessageDialog(dialogEditQuestion, "Eine oder mehrere der Eingaben sind ungültig", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
             case "delete" -> JOptionPane.showMessageDialog(dialogDeleteQuestion, "Eine oder mehrere der Eingaben sind ungültig", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
+            case "null" -> JOptionPane.showMessageDialog(null, text, "Error", JOptionPane.ERROR_MESSAGE);
         }
-
     }
+    public void showSuccessMessage(String dialogType, String text) {
+        switch (dialogType) {
+            case "add" -> JOptionPane.showMessageDialog(dialogAddQuestion, "Frage erfolgreich hinzugefügt", "Success", JOptionPane.INFORMATION_MESSAGE);
+            case "edit" -> JOptionPane.showMessageDialog(dialogEditQuestion, text, "Success", JOptionPane.INFORMATION_MESSAGE);
+            case "delete" -> JOptionPane.showMessageDialog(dialogDeleteQuestion, "Frage erfolgreich gelöscht", "Success", JOptionPane.INFORMATION_MESSAGE);
+            case "null" -> JOptionPane.showMessageDialog(null, text, "Error", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
 
 
 }

@@ -18,12 +18,12 @@ public class MyFragenpool extends Fragenpool implements Speicherbar{
         Rechtschreibtrainer trainer = new Rechtschreibtrainer(pool,1);
         try(PrintWriter outputStream = new PrintWriter(f)) {
             if(pool == null) return;
-            if(pool.length <= MAXFRAGEN) {
-                outputStream.println(pool.length); //anzahl der fragen
-            }
+            outputStream.println(this.getSize()); //anzahl der fragen
             outputStream.println("========");
             for(int i = 0; i < pool.length;i++) {
-                outputStream.println(pool[i].toString());
+                if(pool[i]!= null) {
+                    outputStream.println(pool[i].toString());
+                }
             }
             outputStream.println("========");
             outputStream.println(trainer.getAnzahlVersuche());

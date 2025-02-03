@@ -32,6 +32,9 @@ public class Frage {
     public void setAntwort(String antwort) {
        if(antwort != null && !antwort.isEmpty()) this.antwort = antwort;
     }
+    public String getTyp() {
+        return "String";
+    }
 
     @Override
     public String toString() {

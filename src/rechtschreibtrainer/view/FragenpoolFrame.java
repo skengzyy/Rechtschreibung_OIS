@@ -9,7 +9,7 @@ public class FragenpoolFrame extends JFrame {
         super("Fragenpool verwalten");
         this.add(panel);
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        this.setSize(800, 500);
+        this.setSize(1000, 550);
         this.setLocationRelativeTo((Component)null);
         this.setVisible(false);
     }

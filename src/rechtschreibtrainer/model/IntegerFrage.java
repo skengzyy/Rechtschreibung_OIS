@@ -20,6 +20,9 @@ public class IntegerFrage extends Frage{
     public boolean check(int antwort) {
         return antwort == loesung;
     }
+    public String getTyp() {
+        return "Integer";
+    }
 
     @Override
     public String toString() {

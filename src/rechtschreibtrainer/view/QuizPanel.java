@@ -39,6 +39,8 @@ public class QuizPanel extends JPanel {
 
 // Info Button oben rechts
         infoButton = new JButton(resizeIcon("/pngs/info.png"));
+        infoButton.setActionCommand("info_quizmode");
+        infoButton.addActionListener(e -> showInfoDialog());
         infoButton.setPreferredSize(new Dimension(50, 50));
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -86,6 +88,21 @@ public class QuizPanel extends JPanel {
 // Button Panel für "Next" und "Abbrechen"
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         GridBagConstraints buttonGbc = new GridBagConstraints();
+// Abbrechen Button
+        exitButton = new JButton("Abbrechen");
+        exitButton.setFont(new Font("Arial", Font.BOLD, 18));
+        exitButton.setPreferredSize(new Dimension(180, 50));
+        exitButton.setBackground(new Color(40, 44, 52));
+        exitButton.setForeground(Color.WHITE);
+        exitButton.setFocusPainted(false);
+        exitButton.setBorder(BorderFactory.createLineBorder(new Color(178, 34, 34), 2));
+        exitButton.setActionCommand("quiz_abbrechen");
+        exitButton.addActionListener(listener);
+        buttonGbc.gridx = 1;
+        buttonGbc.weightx = 0.5;
+        buttonGbc.insets = new Insets(0, 15, 0, 0);  // Abstand
+        buttonPanel.add(exitButton, buttonGbc);
+        buttonPanel.setBackground(new Color(40, 44, 52));
 
 // Next Button
         nextButton = new JButton("Next");
@@ -104,21 +121,7 @@ public class QuizPanel extends JPanel {
         buttonGbc.fill = GridBagConstraints.HORIZONTAL;  // Horizontal füllen
         buttonPanel.add(nextButton, buttonGbc);
 
-// Abbrechen Button
-        exitButton = new JButton("Abbrechen");
-        exitButton.setFont(new Font("Arial", Font.BOLD, 18));
-        exitButton.setPreferredSize(new Dimension(180, 50));
-        exitButton.setBackground(new Color(40, 44, 52));
-        exitButton.setForeground(Color.WHITE);
-        exitButton.setFocusPainted(false);
-        exitButton.setBorder(BorderFactory.createLineBorder(new Color(178, 34, 34), 2));
-        exitButton.setActionCommand("quiz_abbrechen");
-        exitButton.addActionListener(listener);
-        buttonGbc.gridx = 1;
-        buttonGbc.weightx = 0.5;
-        buttonGbc.insets = new Insets(0, 15, 0, 0);  // Abstand
-        buttonPanel.add(exitButton, buttonGbc);
-        buttonPanel.setBackground(new Color(40, 44, 52));
+
 
 // Buttons unter der Frage und dem Textfeld
         gbc.gridx = 0;
@@ -214,6 +217,18 @@ public class QuizPanel extends JPanel {
         Image image = icon.getImage();
         Image resizedImage = image.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         return new ImageIcon(resizedImage);
+    }
+
+    public void showInfoDialog() {
+        JOptionPane.showMessageDialog(this,
+                "Im Quizmodus müssen Sie die Fragen nacheinander beantworten \n" +
+                        "(String, Boolean, Bild oder Integer).\n\n" +
+                        "Es werden aus Ihrem Fragenpool die ersten 10 Fragen gestellt. \n" +
+                        "Wenn Sie alle richtig beantwortet haben, können Sie mit den \n" +
+                        "nächsten 10 weitermachen (20 insgesamt) usw., \n" +
+                        "bis alle 30 Fragen richtig beantwortet wurden.",
+                "Info",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
 

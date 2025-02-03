@@ -57,6 +57,9 @@ public class BildFrage extends Frage {
             super.setFrageText(frage);
         };
     }
+    public String getTyp() {
+        return "Bild";
+    }
 
     @Override
     public String toString() {

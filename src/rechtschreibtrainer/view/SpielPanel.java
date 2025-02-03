@@ -158,7 +158,7 @@ public class SpielPanel extends JPanel {
 
         counterLabel.setText(currentCount + "/" + totalQuestions);
 
-        buchstabenSalat = neuerBuchstabenSalat.getFrage().toCharArray();
+        buchstabenSalat = neuerBuchstabenSalat.getAntwort().toCharArray();
         richtigeAntwort = neuerBuchstabenSalat.getAntwort();
         aktuelleAntwort = "";
 
@@ -197,7 +197,7 @@ public class SpielPanel extends JPanel {
     }
 
     public void startMusic() {
-        initializeMusic("src/audio/brhymes.wav");
+        initializeMusic("src/audio/ksi.wav");
         if (musicClip != null && !musicClip.isRunning()) {
             musicClip.setFramePosition(0);
             musicClip.start();

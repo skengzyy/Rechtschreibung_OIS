@@ -7,36 +7,35 @@ import java.awt.*;
 
 public class MenüPanel extends JPanel {
     private JButton verwalten, quizmode, spielmode, hilfe, exit;
+    JDialog dialogSavePool;
     private JLabel titel;
-
+    private TrainerController controller;
     public MenüPanel(TrainerController controller) {
-
+        this.controller = controller;
         this.setLayout(new BorderLayout());
         this.setBackground(new Color(40, 44, 52));
 
-        // fonts
+        // Fonts
         Font titelFont = new Font("Arial", Font.BOLD, 32);
         Font buttonFont = new Font("Arial", Font.PLAIN, 18);
 
-        // titel
+        // Titel
         titel = new JLabel("SpellWeaver - Rechtschreibtrainer", JLabel.CENTER);
         titel.setFont(titelFont);
         titel.setForeground(new Color(230, 230, 230));
         titel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         this.add(titel, BorderLayout.NORTH);
 
-        // button panel
+        // Button-Panel
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(5, 1, 10, 10));
         buttonPanel.setBackground(new Color(40, 44, 52));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
 
-        // button erstellen
+        // Buttons erstellen
         verwalten = createStyledButton("Fragenpool laden//verwalten", buttonFont, new Color(59, 89, 152), Color.WHITE, "verwalten", controller);
         quizmode = createStyledButton("Quizmodus starten", buttonFont, new Color(46, 204, 113), Color.WHITE, "quizmode", controller);
-        quizmode.setEnabled(false);
         spielmode = createStyledButton("Spielmodus starten", buttonFont, new Color(241, 196, 15), Color.WHITE, "spielmode", controller);
-        spielmode.setEnabled(false);
         hilfe = createStyledButton("Hilfe", buttonFont, new Color(52, 152, 219), Color.WHITE, "hilfe", controller);
         exit = createStyledButton("Beenden", buttonFont, new Color(231, 76, 60), Color.WHITE, "exit", controller);
 
@@ -49,16 +48,6 @@ public class MenüPanel extends JPanel {
         this.add(buttonPanel, BorderLayout.CENTER);
     }
 
-    /**
-     * Methode die die Buttons erstellts(um Code verdopplung zu vermeiden
-     * @param text die text des Buttons
-     * @param font font des texts
-     * @param bgColor farbe der button
-     * @param fgColor farbe des text
-     * @param actionCommand actioncommand fur controller
-     * @param controller controller verbindeung
-     * @return die erstetlle button als JButton
-     */
     private JButton createStyledButton(String text, Font font, Color bgColor, Color fgColor, String actionCommand, TrainerController controller) {
         JButton button = new JButton(text);
         button.setFont(font);
@@ -72,14 +61,36 @@ public class MenüPanel extends JPanel {
 
         return button;
     }
-
-    public void enabledModes(boolean yes) {
-        if(yes) {
-            quizmode.setEnabled(true);
-            spielmode.setEnabled(true);
-        } else {
-            quizmode.setEnabled(false);
-            spielmode.setEnabled(false);
-        }
+    public void showPoolNotLoaded() {
+        JOptionPane.showMessageDialog(null, "Fragenpool noch nicht geladen! \nÖffne den Fragenpool Verwaltungsfenster \num einen Fragenpool zu laden", "Hinweis", JOptionPane.WARNING_MESSAGE);
     }
+    public void isPoolSavedDialog() {
+        dialogSavePool = new JDialog((Frame) null, "Fragenpool nicht gespeichert", true);
+        dialogSavePool.setLayout(new GridLayout(2, 1, 10, 10));
+
+
+        JLabel infoText = new JLabel("Ihr Fragenpool wurde geändert aber nicht gespeichert.");
+        dialogSavePool.add(infoText);
+        JPanel selection = new JPanel(new GridLayout(1, 2, 10, 10));
+        JButton speichern = new JButton("Speichern");
+        JButton beenden = new JButton("Exit");
+        beenden.setActionCommand("exit_dialog");
+        speichern.setActionCommand("save_dialog");
+        beenden.addActionListener(controller);
+        speichern.addActionListener(controller);
+
+        selection.add(speichern);
+        selection.add(beenden);
+        dialogSavePool.add(selection);
+
+        dialogSavePool.setSize(400, 150);
+        dialogSavePool.setLocationRelativeTo(this);
+        dialogSavePool.setVisible(true);
+    }
+    public void hideExitDialog() {
+        dialogSavePool.setVisible(false);
+    }
+
+
+
 }

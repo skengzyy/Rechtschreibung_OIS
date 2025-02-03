@@ -24,6 +24,9 @@ public class BooleanFrage extends Frage{
         }
         return false;
     }
+    public String getTyp() {
+        return "Boolean";
+    }
 
     @Override
     public String toString() {

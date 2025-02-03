@@ -8,7 +8,6 @@ public class SpielFrame extends JFrame {
         this.add(panel);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(1000, 550);
-        this.setResizable(false);
         this.setLocationRelativeTo((Component)null);
         this.setVisible(false);
     }
