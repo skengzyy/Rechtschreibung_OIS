@@ -5,6 +5,11 @@ import rechtschreibtrainer.controller.TrainerController;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * MenüPanel für das Menü
+ * @author Daniel Ofosuhene
+ */
+
 public class MenüPanel extends JPanel {
     private JButton verwalten, quizmode, spielmode, hilfe, exit;
     JDialog dialogSavePool;

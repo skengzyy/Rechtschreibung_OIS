@@ -17,8 +17,14 @@ public class IntegerFrage extends Frage{
     }
 
 
-    public boolean check(int antwort) {
-        return antwort == loesung;
+    public boolean check(String antwort) {
+        int intAntwort = 0;
+        try {
+            intAntwort = Integer.parseInt(antwort);
+        } catch(NumberFormatException ex) {
+            return false;
+        }
+        return intAntwort == loesung;
     }
     public String getTyp() {
         return "Integer";

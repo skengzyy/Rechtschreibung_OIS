@@ -26,7 +26,7 @@ public class Frage {
     }
 
     public String getAntwort() {
-        return this.antwort;
+        return this.antwort.toString();
     }
 
     public void setAntwort(String antwort) {
@@ -42,10 +42,6 @@ public class Frage {
     }
 
     public boolean check(String antwort){
-        if(this.text != null && !this.text.isEmpty()){
-            antwort = antwort.toLowerCase();
-            return antwort.contains(this.antwort);
-        }
-        return false;
+        return antwort != null && antwort.equals(getAntwort());
     }
 }

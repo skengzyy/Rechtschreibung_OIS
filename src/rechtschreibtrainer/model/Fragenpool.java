@@ -73,6 +73,15 @@ public abstract class Fragenpool {
         }
         return trueSize;
     }
+    public int getSizeForStringQuestions() {
+        int size = 0;
+        for(int i = 0;i < this.fragenpool.length;i++) {
+            if(this.fragenpool[i] != null && this.fragenpool[i].getTyp().equals("String")) {
+                size++;
+            }
+        }
+        return size;
+    }
     public boolean isEmpty() {
         boolean empty = true;
         for(int i=0; i<this.fragenpool.length;i++) {

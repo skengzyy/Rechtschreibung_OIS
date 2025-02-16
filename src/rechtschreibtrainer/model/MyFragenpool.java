@@ -11,14 +11,14 @@ public class MyFragenpool extends Fragenpool implements Speicherbar{
     }
 
     @Override
-    public void speichern(String filename) {
+    public void speichern(String filename, int anzahlVersuche) {
         if(filename == null) return;
         File f = new File(filename);
         Frage[] pool = super.getFragenpool();
         Rechtschreibtrainer trainer = new Rechtschreibtrainer(pool,1);
         try(PrintWriter outputStream = new PrintWriter(f)) {
             if(pool == null) return;
-            outputStream.println(this.getSize()); //anzahl der fragen
+            outputStream.println(this.getSize());
             outputStream.println("========");
             for(int i = 0; i < pool.length;i++) {
                 if(pool[i]!= null) {

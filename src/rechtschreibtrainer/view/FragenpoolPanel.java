@@ -8,6 +8,11 @@ import java.awt.*;
 import java.io.File;
 import java.nio.file.Path;
 
+/**
+ * FragenpoolPanel für Fragenpool Verwaltungsdialog
+ * @author Daniel Ofosuhene
+ */
+
 public class FragenpoolPanel extends JPanel {
 
 
@@ -274,7 +279,7 @@ public class FragenpoolPanel extends JPanel {
         dialogDeleteQuestion.setLayout(new GridLayout(2, 1, 10, 10));
 
         JPanel inputPanel = new JPanel(new BorderLayout());
-        JLabel indexLabel = new JLabel("Index der zu löschenden Frage:");
+        JLabel indexLabel = new JLabel("Nummer der zu löschenden Frage:");
         indexField_Delete = new JTextField();
         inputPanel.add(indexLabel, BorderLayout.NORTH);
         inputPanel.add(indexField_Delete, BorderLayout.CENTER);
@@ -417,7 +422,7 @@ public class FragenpoolPanel extends JPanel {
             if (index < 0) {
                 throw new NumberFormatException();
             }
-            return index;
+            return index - 1;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(dialogDeleteQuestion, "Bitte geben Sie einen gültigen Index ein (positive Zahl).", "Ungültige Eingabe", JOptionPane.ERROR_MESSAGE);
             return -1; // Ungültiger Index

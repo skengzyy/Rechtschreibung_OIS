@@ -1,13 +1,21 @@
 package rechtschreibtrainer.view;
 
+import rechtschreibtrainer.controller.TrainerController;
+
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.*;
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
+
+/**
+ * QuizPanel für Quizmodus
+ * @author Isaac Jerryson
+ */
 
 public class QuizPanel extends JPanel {
     private JButton nextButton,soundButton,infoButton;
@@ -16,11 +24,12 @@ public class QuizPanel extends JPanel {
     private JLabel questionLabel, imageLabel;
     private JLabel counterLabel;
     private JPanel fragen;
+    private JWindow statistik;
 
     private Clip musicClip;
     private boolean isMusicPlaying = false;
     private int currentQuestion = 1;
-    private int totalQuestions = 20;
+    private int totalQuestions = 10;
 
     public QuizPanel(ActionListener listener) throws IOException {
         setLayout(new GridBagLayout());
@@ -63,7 +72,7 @@ public class QuizPanel extends JPanel {
         fragen = new JPanel();
         fragen.setLayout(new BorderLayout());
         fragen.setBackground(new Color(40, 44, 52));
-        questionLabel = new JLabel("Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum");
+        questionLabel = new JLabel("Elon + Trump");
         questionLabel.setFont(new Font("Arial", Font.BOLD, 22));
         questionLabel.setForeground(Color.WHITE);
         fragen.add(questionLabel, BorderLayout.CENTER);
@@ -78,6 +87,8 @@ public class QuizPanel extends JPanel {
         answerField = new JTextField(30);
         answerField.setFont(new Font("Arial", Font.PLAIN, 20));
         answerField.setPreferredSize(new Dimension(400, 40));
+        answerField.setActionCommand("quiz_antwort");
+        answerField.addActionListener(listener);
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.gridwidth = 2;
@@ -113,6 +124,7 @@ public class QuizPanel extends JPanel {
         nextButton.setFocusPainted(false);
         nextButton.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 180), 2));
         nextButton.setActionCommand("next_quizmode");
+        nextButton.setEnabled(false);
         nextButton.addActionListener(listener);
         nextButton.addActionListener(e -> incrementCounter());
         buttonGbc.gridx = 0;
@@ -127,8 +139,8 @@ public class QuizPanel extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 2;
-        gbc.insets = new Insets(20, 10, 20, 10);  // Abstand
-        gbc.fill = GridBagConstraints.HORIZONTAL;  // Horizontal füllen
+        gbc.insets = new Insets(20, 10, 20, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         add(buttonPanel, gbc);
     }
     public void updatePanel(String frage) {
@@ -136,7 +148,7 @@ public class QuizPanel extends JPanel {
         fragen.revalidate();
         fragen.repaint();
         questionLabel.setText(frage);
-        questionLabel.setFont(new Font("Arial", Font.BOLD, 22));
+        questionLabel.setFont(new Font("Arial", Font.BOLD, 30));
         questionLabel.setForeground(Color.WHITE);
         fragen.add(questionLabel, BorderLayout.CENTER);
 
@@ -155,9 +167,21 @@ public class QuizPanel extends JPanel {
 
         // Setze das Layout des Panels
         fragen.setLayout(new BorderLayout());
-        fragen.add(new JLabel(new ImageIcon(image.getScaledInstance(300, 150, Image.SCALE_SMOOTH))), BorderLayout.CENTER);
+        fragen.add(new JLabel(new ImageIcon(image.getScaledInstance(600, 300, Image.SCALE_SMOOTH))), BorderLayout.CENTER);
     }
 
+    public void enableNext(boolean enable) {
+        nextButton.setEnabled(enable);
+    }
+    public void enableAntwort(boolean enable) {
+        answerField.setEnabled(enable);
+    }
+    public void emptyAnswerField() {
+        answerField.setText("");
+    }
+    public String getAntwortText() {
+        return answerField.getText();
+    }
     public void setCounterText(String text) {
         counterLabel.setText(text);
     }
@@ -175,6 +199,9 @@ public class QuizPanel extends JPanel {
             currentQuestion++;
             counterLabel.setText(currentQuestion + "/" + totalQuestions);
         }
+    }
+    public void resetCounter() {
+        counterLabel.setText(currentQuestion + "/" + totalQuestions);
     }
 
     private void initializeMusic(String filePath) {
@@ -230,6 +257,194 @@ public class QuizPanel extends JPanel {
                 "Info",
                 JOptionPane.INFORMATION_MESSAGE);
     }
+    public void showAntwortDialog(JFrame parent, boolean richtig) {
+        JWindow antwort = new JWindow(parent);
+        antwort.setSize(300, 200);
+        antwort.setLayout(new BorderLayout());
+
+        ImageIcon originalIcon = new ImageIcon(richtig ? "src/pngs/richtig.png" : "src/pngs/falsch.png");
+        Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        ImageIcon icon = new ImageIcon(scaledImage);
+        JLabel iconLabel = new JLabel(icon, JLabel.CENTER);
+
+        JLabel textLabel = new JLabel(richtig ? "RICHTIG" : "FALSCH", JLabel.CENTER);
+        textLabel.setFont(new Font("Arial", Font.BOLD, 24));
+
+        JButton okButton = new JButton("OK");
+        okButton.addActionListener(e -> antwort.dispose());
+
+        antwort.add(iconLabel, BorderLayout.NORTH);
+        antwort.add(textLabel, BorderLayout.CENTER);
+        antwort.add(okButton, BorderLayout.SOUTH);
+
+        antwort.setLocationRelativeTo(parent);
+        antwort.setVisible(true);
+    }
+    public void showStatistikDialog(JFrame parent, int gesamt, int richtig, int falsch, ActionListener controller) {
+        statistik = new JWindow(parent);
+        statistik.setSize(400, 400);
+        statistik.setLayout(new BorderLayout());
 
 
+        double richtigProzent = (gesamt > 0) ? ((double) richtig / gesamt) * 100 : 0;
+        double falschProzent = 100 - richtigProzent;
+
+        JPanel chartPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                int size = Math.min(getWidth(), getHeight()) - 20;
+                int x = (getWidth() - size) / 2;
+                int y = (getHeight() - size) / 2;
+                int winkelRichtig = (int) (richtigProzent * 3.6);
+
+                // Zeichne den grünen Bereich (Richtig)
+                g2d.setColor(Color.GREEN);
+                g2d.fillArc(x, y, size, size, 0, winkelRichtig);
+
+                // Zeichne den roten Bereich (Falsch)
+                g2d.setColor(Color.RED);
+                g2d.fillArc(x, y, size, size, winkelRichtig, 360 - winkelRichtig);
+
+                // Berechnung der Mittelpunkte für Text
+                int xRichtigText = x + size / 2 + (int) (Math.cos(Math.toRadians(winkelRichtig / 2)) * (size / 4));
+                int yRichtigText = y + size / 2 - (int) (Math.sin(Math.toRadians(winkelRichtig / 2)) * (size / 4));
+
+                int xFalschText = x + size / 2 + (int) (Math.cos(Math.toRadians(winkelRichtig + (360 - winkelRichtig) / 2)) * (size / 4));
+                int yFalschText = y + size / 2 - (int) (Math.sin(Math.toRadians(winkelRichtig + (360 - winkelRichtig) / 2)) * (size / 4));
+
+                // Text für Richtig und Falsch
+                g2d.setColor(Color.BLACK);
+                g2d.drawString(String.format("%.1f%% Richtig", richtigProzent), xRichtigText, yRichtigText);
+                g2d.drawString(String.format("%.1f%% Falsch", falschProzent), xFalschText, yFalschText);
+            }
+        };
+        chartPanel.setPreferredSize(new Dimension(200, 200));
+
+        JLabel infoLabel = new JLabel("Fragen: " + gesamt + " | Richtig: " + richtig + " | Falsch: " + falsch);
+        infoLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        JButton wiederholenButton = new JButton("Wiederholen");
+        wiederholenButton.setActionCommand("retry_Statistik");
+        wiederholenButton.addActionListener(controller);
+
+        JButton weitermachenButton = new JButton("Weitermachen");
+        weitermachenButton.setActionCommand("continue_Statistik");
+        weitermachenButton.addActionListener(controller);
+
+        JButton speichernButton = new JButton("Zu Menü");
+        speichernButton.setActionCommand("menü_Statistik");
+        speichernButton.addActionListener(controller);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(wiederholenButton);
+        buttonPanel.add(weitermachenButton);
+        buttonPanel.add(speichernButton);
+
+        statistik.add(chartPanel, BorderLayout.CENTER);
+        statistik.add(infoLabel, BorderLayout.NORTH);
+        statistik.add(buttonPanel, BorderLayout.SOUTH);
+
+        statistik.setLocationRelativeTo(parent);
+        statistik.setVisible(true);
+    }
+    public void showKroneDialog(JFrame parent, ActionListener controller) {
+        JDialog kroneDialog = new JDialog(parent, "Rechtschreib-König", true);
+        kroneDialog.setSize(400, 500);
+        kroneDialog.setUndecorated(true);
+        kroneDialog.setLocationRelativeTo(this);
+
+        JPanel panel = new JPanel() {
+            private final Image krone = new ImageIcon("out/production/Rechtschreibung_OIS/pngs/krone.png").getImage();
+            private int yPosition = 50;
+            private boolean nachOben = true;
+
+            {
+                Timer timer = new Timer(50, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (nachOben) {
+                            yPosition -= 2;
+                            if (yPosition < 40) {
+                                nachOben = false;
+                            }
+                        } else {
+                            yPosition += 2;
+                            if (yPosition > 50) {
+                                nachOben = true;
+                            }
+                        }
+                        repaint();
+                    }
+                });
+                timer.start();
+            }
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                int bildBreite = (int) (getWidth() * 0.7);
+                int bildHöhe = (int) (getHeight() * 0.7);
+                int xBild = (getWidth() - bildBreite) / 2;
+                int yBild = yPosition;
+
+                g.drawImage(krone, xBild, yBild, bildBreite, bildHöhe, this);
+
+                // Text
+                g.setFont(new Font("Arial", Font.BOLD, 18));
+                g.setColor(Color.BLACK);
+                FontMetrics metrics = g.getFontMetrics();
+
+                String zeile1 = "DU BIST OFFIZIELL EIN";
+                String zeile2 = "RECHTSCHREIBKÖNIG";
+
+                int textX1 = (getWidth() - metrics.stringWidth(zeile1)) / 2;
+                int textX2 = (getWidth() - metrics.stringWidth(zeile2) - 90) / 2;
+
+                int textY1 = yBild + bildHöhe + 40;
+                int textY2 = yBild + bildHöhe + 80;
+
+                g.drawString(zeile1, textX1, textY1);
+
+                g.setFont(new Font("Arial", Font.BOLD, 28));
+                g.drawString(zeile2, textX2, textY2);
+            }
+        };
+
+        panel.setPreferredSize(new Dimension(400, 500));
+
+        JButton okButton = new JButton("OK");
+        okButton.setFont(new Font("Arial", Font.BOLD, 16));
+        okButton.setActionCommand("ok_könig_dialog");
+        okButton.addActionListener(controller);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(okButton);
+
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+        kroneDialog.add(panel);
+        kroneDialog.setVisible(true);
+    }
+
+    public int updateFrageIndex(int index, int maxQuestions) {
+        if(index + 1 < maxQuestions) {
+            return index + 1;
+        }
+        return -1;
+    }
+    public void showErrorStatisticsMessage(String type) {
+        switch (type) {
+            case "continue" -> JOptionPane.showMessageDialog(null, "Sie haben den ersten Durchgang leider nicht bestanden. Bitte drúcke auf Wiederholen", "Weitermachen", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public void showSuccessStatisticsMessage(String type) {
+        switch (type) {
+            case "continue" -> JOptionPane.showMessageDialog(null, "Sie haben den  Durchgang bestanden! Jetzt beginnt der nächste Durchgang. Viel Glück!", "Weitermachen", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    public JWindow getStatistik() {
+        return statistik;
+    }
 }

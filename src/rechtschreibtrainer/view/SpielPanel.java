@@ -6,10 +6,15 @@ import rechtschreibtrainer.model.WortsalatFrage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 import java.awt.event.ActionListener;
 import javax.sound.sampled.*;
 import java.io.*;
 
+/**
+ * SpielPanel für Spielmodus
+ * @author Samo Kitzer
+ */
 public class SpielPanel extends JPanel {
 
     private JLabel counterLabel;
@@ -22,11 +27,13 @@ public class SpielPanel extends JPanel {
     private char[] buchstabenSalat;
     private String richtigeAntwort;
     private String aktuelleAntwort;
-    private Clip musicClip;
+    private JWindow statistik;
+
 
 
     public SpielPanel(TrainerController controller, Frage ersteFrage) {
-        this.buchstabenSalat = ersteFrage.getFrageText().toCharArray();
+        this.buchstabenSalat = ersteFrage.getAntwort().toCharArray();
+        this.buchstabenSalat = mischeArray(this.buchstabenSalat);
         this.richtigeAntwort = ersteFrage.getAntwort();
         this.aktuelleAntwort = "";
 
@@ -129,6 +136,17 @@ public class SpielPanel extends JPanel {
         return button;
     }
 
+    private char[] mischeArray(char[] array) {
+        Random rand = new Random();
+        for (int i = array.length - 1; i > 0; i--) {
+            int j = rand.nextInt(i + 1);
+            char temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return array;
+    }
+
     public void updateStatus(boolean korrekt, String aktuelleEingabe) {
         if (korrekt) {
             statusLabel.setText("Richtig! Das richtige Wort: " + aktuelleEingabe);
@@ -148,17 +166,17 @@ public class SpielPanel extends JPanel {
             button.setOpaque(true);
         }
     }
-    public void resetSpielPanel(Frage neuerBuchstabenSalat, TrainerController tc, boolean counter){
-
-        if(counter){
-            this.currentCount += 1;
-        }else{
-            this.currentCount = 1;
+    public void updateCounter() {
+        if (currentCount < totalQuestions) {
+            currentCount++;
+            counterLabel.setText(currentCount + "/" + totalQuestions);
         }
-
+    }
+    public void resetSpielPanel(Frage neuerBuchstabenSalat, TrainerController tc){
         counterLabel.setText(currentCount + "/" + totalQuestions);
 
         buchstabenSalat = neuerBuchstabenSalat.getAntwort().toCharArray();
+        buchstabenSalat = mischeArray(this.buchstabenSalat);
         richtigeAntwort = neuerBuchstabenSalat.getAntwort();
         aktuelleAntwort = "";
 
@@ -185,29 +203,96 @@ public class SpielPanel extends JPanel {
     public String getRichtigeAntwort(){
         return richtigeAntwort;
     }
-    private void initializeMusic(String filePath) {
-        try {
-            File audioFile = new File(filePath);
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-            musicClip = AudioSystem.getClip();
-            musicClip.open(audioStream);
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            System.err.println("Fehler beim Laden der Musik: " + e.getMessage());
+
+    public int updateFrageIndex(int index, int maxQuestions) {
+        if(index + 1 <= maxQuestions -1) {
+            return index + 1;
         }
+        return -1;
     }
 
-    public void startMusic() {
-        initializeMusic("src/audio/ksi.wav");
-        if (musicClip != null && !musicClip.isRunning()) {
-            musicClip.setFramePosition(0);
-            musicClip.start();
-            musicClip.loop(Clip.LOOP_CONTINUOUSLY);
-        }
+    public void setTotalQuestions(int totalQuestions) {
+        this.totalQuestions = totalQuestions;
+        this.counterLabel.setText(currentCount + "/" + totalQuestions);
+    }
+    public void setCurrentQuestion(int currentQuestion) {
+        this.currentCount = currentQuestion;
+        this.counterLabel.setText(currentCount + "/" + totalQuestions);
+    }
+    public void enableNext(boolean enable){
+        this.nextButton.setEnabled(enable);
     }
 
-    public void stopMusic() {
-        if (musicClip != null && musicClip.isRunning()) {
-            musicClip.stop();
-        }
+    public JWindow getStatistik() {
+        return statistik;
     }
+
+    public void showStatistikDialog(JFrame parent, int gesamt, int richtig, int falsch, ActionListener controller) {
+        statistik = new JWindow(parent);
+        statistik.setSize(400, 400);
+        statistik.setLayout(new BorderLayout());
+
+
+        double richtigProzent = (gesamt > 0) ? ((double) richtig / gesamt) * 100 : 0;
+        double falschProzent = 100 - richtigProzent;
+
+        JPanel chartPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                int size = Math.min(getWidth(), getHeight()) - 20;
+                int x = (getWidth() - size) / 2;
+                int y = (getHeight() - size) / 2;
+                int winkelRichtig = (int) (richtigProzent * 3.6);
+
+                // Zeichne den grünen Bereich (Richtig)
+                g2d.setColor(Color.GREEN);
+                g2d.fillArc(x, y, size, size, 0, winkelRichtig);
+
+                // Zeichne den roten Bereich (Falsch)
+                g2d.setColor(Color.RED);
+                g2d.fillArc(x, y, size, size, winkelRichtig, 360 - winkelRichtig);
+
+                // Berechnung der Mittelpunkte für Text
+                int xRichtigText = x + size / 2 + (int) (Math.cos(Math.toRadians(winkelRichtig / 2)) * (size / 4));
+                int yRichtigText = y + size / 2 - (int) (Math.sin(Math.toRadians(winkelRichtig / 2)) * (size / 4));
+
+                int xFalschText = x + size / 2 + (int) (Math.cos(Math.toRadians(winkelRichtig + (360 - winkelRichtig) / 2)) * (size / 4));
+                int yFalschText = y + size / 2 - (int) (Math.sin(Math.toRadians(winkelRichtig + (360 - winkelRichtig) / 2)) * (size / 4));
+
+                // Text für Richtig und Falsch
+                g2d.setColor(Color.BLACK);
+                g2d.drawString(String.format("%.1f%% Richtig", richtigProzent), xRichtigText, yRichtigText);
+                g2d.drawString(String.format("%.1f%% Falsch", falschProzent), xFalschText, yFalschText);
+            }
+        };
+        chartPanel.setPreferredSize(new Dimension(200, 200));
+
+        JLabel infoLabel = new JLabel("Fragen: " + gesamt + " | Richtig: " + richtig + " | Falsch: " + falsch);
+        infoLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        JButton wiederholenButton = new JButton("Wiederholen");
+        wiederholenButton.setActionCommand("retry_statistik_spiel");
+        wiederholenButton.addActionListener(controller);
+
+
+        JButton speichernButton = new JButton("Zu Menü");
+        speichernButton.setActionCommand("menü_statistik_spiel");
+        speichernButton.addActionListener(controller);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(wiederholenButton);
+        buttonPanel.add(speichernButton);
+
+        statistik.add(chartPanel, BorderLayout.CENTER);
+        statistik.add(infoLabel, BorderLayout.NORTH);
+        statistik.add(buttonPanel, BorderLayout.SOUTH);
+
+        statistik.setLocationRelativeTo(parent);
+        statistik.setVisible(true);
+    }
+
+
+
 }
