@@ -428,7 +428,7 @@ public class TrainerController implements ActionListener {
                 if( antwort.equalsIgnoreCase("true") ||antwort.equalsIgnoreCase("false") ) {
 
                 }
-                fragenPanel.showSuccessMessage("edit", "Frage" + " (" + indexEdit+1 + ") " + "erfolgreich geändert.");
+                fragenPanel.showSuccessMessage("edit", "Frage" + " (" + (indexEdit+1) + ") " + "erfolgreich geändert.");
                 reloadQuestionDisplay();
                 fragenpoolChanged = true;
             }
